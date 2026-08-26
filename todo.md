@@ -1,11 +1,12 @@
 # FerixBuilder Feature Tracker
 
-- [x] Establish the exact `Backend`, `Web/frontend`, and `Web/admin` workspace areas.
-- [x] Build a preview-mode customer dashboard with project status, timeline, preview, progress, activity, support, and account panels.
-- [x] Add a complete full-height mobile workspace drawer containing every desktop sidebar item and section.
-- [x] Create a shared customer-workspace application shell with a route-aware desktop sidebar and mobile navigation.
-- [x] Build separate routes for Dashboard, My Project, Preview Website, Revisions, Payments, and Downloads.
-- [x] Build separate routes for Customers, Products, Bookings, Domain, Technical Care, System Health, and Support.
-- [x] Route every desktop sidebar item and mobile workspace item to its dedicated dashboard page.
-- [x] Exercise every desktop sidebar and persistent mobile bottom-navigation route through shared navigation.
-- [x] Click every mobile workspace-drawer route and confirm all 13 dedicated customer-workspace pages load through mobile navigation.
+- [x] Audit the FerixBuilder blueprint and current customer workspace for every missing customer capability.
+- [x] Add guided onboarding, project files, managed-service request, and settings workspace routes.
+- [x] Add baseline customer preview workflows for project, preview, revisions, payments, downloads, business data, and support.
+- [x] Replace remaining customer action placeholders with connected preview-mode route transitions or local workflow states.
+- [x] Implement route-specific business-data records with add, search, filter, and empty-state behavior.
+- [x] Verify every customer workspace page after the completion pass at desktop and mobile widths.
+- [x] Replace all remaining toast-only workspace actions with route changes or visible preview-state outcomes.
+- [x] Make customer, product, and booking filters change displayed preview records with route-specific record detail states.
+- [x] Replace the remaining onboarding, settings, and workspace-header notification-only actions with persistent preview outcomes or routed destinations.
+- [x] Revalidate the final in-page preview-state actions on desktop and mobile.

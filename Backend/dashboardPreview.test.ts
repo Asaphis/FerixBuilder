@@ -7,7 +7,7 @@ describe("FerixBuilder preview dashboard", () => {
   });
 
   it("includes workspace, business, and care navigation groups", () => {
-    expect(dashboardSections.map(([title]) => title)).toEqual(["WORKSPACE", "BUSINESS", "CARE"]);
+    expect(dashboardSections.map(([title]) => title)).toEqual(["WORKSPACE", "BUSINESS", "CARE", "ACCOUNT"]);
     expect(dashboardTasks).toHaveLength(5);
   });
 
@@ -15,10 +15,10 @@ describe("FerixBuilder preview dashboard", () => {
     const routes = dashboardSections.flatMap(([, items]) => items.map(([, , href]) => href));
 
     expect(routes).toEqual([
-      "/dashboard", "/workspace/project", "/workspace/preview", "/workspace/revisions", "/workspace/payments", "/workspace/downloads",
+      "/dashboard", "/workspace/onboarding", "/workspace/project", "/workspace/files", "/workspace/preview", "/workspace/revisions", "/workspace/payments", "/workspace/downloads",
       "/workspace/customers", "/workspace/products", "/workspace/bookings", "/workspace/domain",
-      "/workspace/technical-care", "/workspace/system-health", "/workspace/support",
+      "/workspace/technical-care", "/workspace/management", "/workspace/system-health", "/workspace/support", "/workspace/settings",
     ]);
-    expect(new Set(routes).size).toBe(13);
+    expect(new Set(routes).size).toBe(17);
   });
 });

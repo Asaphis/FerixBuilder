@@ -6,4 +6,7 @@ import "./auth-cta.css";
 import "./dashboard.css";
 import "./dashboard-mobile.css";
 import "./workspace.css";
+import "./workflow.css";
+import "./workflow-fixes.css";
+import "./project-workflow.css";
 createRoot(document.getElementById("root")!).render(<App />);

@@ -1,0 +1,32 @@
+/* Mobile dashboard is information-complete: all desktop navigation stays in a drawer and all cards remain present. */
+.drawer-backdrop,.dash-bottom-nav,.drawer-caption{display:none}
+@media(max-width:780px){
+  .dashboard-shell{padding-bottom:76px}
+  .dash-main{padding-bottom:20px}
+  .drawer-backdrop{position:fixed;z-index:29;inset:0;border:0;background:#1412297a;opacity:0;pointer-events:none;transition:opacity .2s}
+  .drawer-backdrop.open{display:block;opacity:1;pointer-events:auto}
+  .dash-sidebar{z-index:30;width:min(84vw,310px);padding:18px 13px 17px;overflow-y:auto}
+  .dash-sidebar.mobile-open{transform:translateX(0)}
+  .drawer-caption{display:block;margin:-13px 8px 19px;color:#777c91;font-size:10px;line-height:1.45}
+  .dash-nav-group{margin-bottom:15px}
+  .dash-nav-group button{padding:11px 10px;font-size:12px}
+  .dash-profile{position:sticky;bottom:0;margin-top:10px;background:#fff}
+  .dash-bottom-nav{position:fixed;z-index:25;right:0;bottom:0;left:0;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;padding:8px max(12px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));border-top:1px solid #e4e6ee;background:#fff;box-shadow:0 -8px 25px #17203312}
+  .dash-bottom-nav button{display:grid;justify-items:center;gap:4px;border:0;border-radius:8px;background:transparent;padding:5px 2px;color:#6f7484;font-size:8px;font-weight:700}
+  .dash-bottom-nav button:active{background:#efebff;color:#7045e8}
+  .dash-bottom-nav svg{color:#7045e8}
+  .dash-header{padding:0 16px}.dash-menu{display:none}.dash-search{display:flex;margin-left:0}.dash-return{display:none}
+  .dash-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 14px}.dash-stat{min-height:84px;padding:11px;gap:8px}.dash-stat:nth-child(5){grid-column:1/-1}.dash-stat p{font-size:9px}.dash-stat h2{font-size:14px}.stat-icon{width:31px;height:31px}.stat-icon svg{width:15px}
+  .dash-welcome{padding:20px 14px 14px}.dash-welcome h1{font-size:22px}.dash-welcome>div>p:last-child{max-width:290px}.dash-welcome .dash-primary{width:auto}
+  .dash-content-grid{padding:10px 14px;gap:9px}.dash-footer-grid{padding:0 14px;gap:9px}.dash-card{padding:13px}.dash-two-col,.dash-right-col{gap:9px}.card-title h2,.dash-card h2{font-size:13px}.card-title p,.dash-card p{font-size:9px}
+  .milestones{gap:16px;margin-top:20px}.milestones>div{min-width:62px}.milestones i{width:29px;height:29px}.milestones b{font-size:8px}.milestones small{font-size:7px}
+  .preview-window section{min-height:140px}.preview-window section p{font-size:18px}.preview-actions{gap:7px}.preview-actions button{padding:9px 6px;font-size:9px}
+  .chart{grid-template-columns:28px 1fr}.chart-y,.chart svg{height:132px}.chart-days{left:28px}.task-list{margin-top:29px}.task-list>div{font-size:9px}
+  .status-card>p{font-size:10px}.review-button,.approval-button,.outline-button{padding:10px;font-size:10px}.activity{gap:8px}.activity p{font-size:8.5px}.dash-footer-grid .dash-card{padding:13px;min-height:118px}
+}
+@media(max-width:420px){
+  .dash-header{height:58px}.dash-search{padding:8px;width:100%}.dash-search input{font-size:10px}.dash-header-actions{display:none}
+  .dash-welcome{align-items:flex-start;padding-top:17px}.dash-welcome h1{font-size:21px}.dash-welcome .dash-primary{width:100%}
+  .dash-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-stat:nth-child(5){grid-column:1/-1}.dash-stat small{font-size:8px}
+  .project-map .card-title>button{max-width:106px}.dash-card{border-radius:9px}.dash-notice{bottom:80px}
+}

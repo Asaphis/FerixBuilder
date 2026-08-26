@@ -12,6 +12,12 @@ Desktop and mobile dashboard screenshots were captured. At mobile width, the das
 
 The compact dashboard menu control was triggered during browser verification and applied the `mobile-open` sidebar state successfully.
 
+The persistent mobile navigation was verified to contain Home, Project, Preview, Support, and Workspace destinations. Its Workspace control opened the complete mobile drawer, which contains the WORKSPACE, BUSINESS, and CARE groups from the desktop sidebar.
+
+End-to-end mobile navigation verification confirmed that Home, Project, Preview, and Support target the dashboard-top, project, preview, and support panels. The Workspace control opened the drawer and the close control dismissed it. The drawer contains all 13 desktop navigation destinations: Dashboard, My project, Preview website, Revisions, Payments, Downloads, Customers, Products, Bookings, Domain, Technical care, System health, and Support.
+
+An explicit full-page phone-viewport check confirmed that the mobile layout retains the complete desktop information set: five status cards, project overview and delivery route, website preview and both preview actions, project-progress chart and task list, project status actions, recent activity, support, useful links, project team, and update preferences. The compact two-column status grid and vertically stacked cards retain readable touch targets without omitting desktop content.
+
 The `Review website` dashboard control was also clicked. It showed the expected preview feedback notice, confirming that the review workflow is active and not locked during preview mode.
 
 The `Open preview` and `Request changes` controls were clicked separately and each returned the expected visible preview notice. These core customer workflow controls are therefore active for demonstration without a real project record, payment, or session gate.

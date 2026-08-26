@@ -23,17 +23,12 @@
 - [x] Define and implement the original FerixBuilder dark purple visual system based on the supplied reference.
 - [x] Build the complete conversion-focused landing page with hero, services, process, examples, pricing, and action bar.
 - [x] Create real public routes for services, how it works, examples, pricing, about, FAQ, and contact using the shared system.
-- [x] Verify responsive navigation, page routing, motion, and forms on desktop and mobile.
+- [x] Build shared responsive navigation, footer, and purposeful motion across the public website.
 - [x] Add dedicated Log in and Create account pages using the existing secure authentication service.
-- [x] Add visible Log in and Create account paths to the public header, mobile navigation, and conversion calls to action.
-- [x] Correct mobile spacing, typography, section sizing, and contact-page form flow for phone viewports.
-- [x] Verify the public site, authentication entry, and contact page across desktop and mobile.
-- [x] Add Create account and Log in options to the main landing-page conversion areas.
-- [x] Re-verify every public route at desktop and mobile widths after the authentication and responsive updates.
-- [x] Verify the visible account-entry controls start the nonce-protected authentication flow.
 - [x] Build a preview-mode customer dashboard with project status, timeline, preview, progress, activity, support, and account panels.
 - [x] Add responsive desktop sidebar and mobile dashboard navigation with stacked content layouts.
 - [x] Route Log in and Create account directly to the dashboard during preview, without requiring a real session.
-- [x] Verify dashboard interactions, simulated access, desktop layout, and mobile layout.
-- [x] Route the remaining bottom conversion account links directly to the preview dashboard.
-- [x] Verify Create account and key dashboard preview interactions in the live browser.
+- [x] Add a persistent bottom dashboard navigation with Home, Project, Preview, Support, and Workspace menu access.
+- [x] Build a complete full-height mobile workspace drawer containing every desktop sidebar item and section.
+- [x] Preserve every dashboard card and detail on mobile with compact two-column cards and readable stacked panels.
+- [x] Verify every mobile bottom-navigation action, drawer item, drawer close control, and complete dashboard content accessibility.

@@ -20,3 +20,7 @@
 - [x] Verify the complete public route set and shared navigation at mobile size.
 - [x] Remove the current landing page, public routes, navigation, animations, and visual assets so the interface is entirely empty.
 - [x] Preserve the Backend, database contact-enquiry capability, and named workspace structure for the reference-matched rebuild.
+- [x] Define and implement the original FerixBuilder dark purple visual system based on the supplied reference.
+- [x] Build the complete conversion-focused landing page with hero, services, process, examples, pricing, and action bar.
+- [x] Create real public routes for services, how it works, examples, pricing, about, FAQ, and contact using the shared system.
+- [x] Verify responsive navigation, page routing, motion, and forms on desktop and mobile.

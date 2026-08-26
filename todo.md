@@ -31,3 +31,9 @@
 - [x] Add Create account and Log in options to the main landing-page conversion areas.
 - [x] Re-verify every public route at desktop and mobile widths after the authentication and responsive updates.
 - [x] Verify the visible account-entry controls start the nonce-protected authentication flow.
+- [x] Build a preview-mode customer dashboard with project status, timeline, preview, progress, activity, support, and account panels.
+- [x] Add responsive desktop sidebar and mobile dashboard navigation with stacked content layouts.
+- [x] Route Log in and Create account directly to the dashboard during preview, without requiring a real session.
+- [x] Verify dashboard interactions, simulated access, desktop layout, and mobile layout.
+- [x] Route the remaining bottom conversion account links directly to the preview dashboard.
+- [x] Verify Create account and key dashboard preview interactions in the live browser.

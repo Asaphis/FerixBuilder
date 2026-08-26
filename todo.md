@@ -10,3 +10,4 @@
 - [x] Add and run unit tests for the workspace contracts.
 - [x] Verify the preview, type checks, and test suite.
 - [x] Connect the public Start your project CTA to the authenticated customer entry flow.
+- [x] Remove the public and internal user-interface implementation, leaving an empty application surface.

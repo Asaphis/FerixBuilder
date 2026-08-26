@@ -24,3 +24,10 @@
 - [x] Build the complete conversion-focused landing page with hero, services, process, examples, pricing, and action bar.
 - [x] Create real public routes for services, how it works, examples, pricing, about, FAQ, and contact using the shared system.
 - [x] Verify responsive navigation, page routing, motion, and forms on desktop and mobile.
+- [x] Add dedicated Log in and Create account pages using the existing secure authentication service.
+- [x] Add visible Log in and Create account paths to the public header, mobile navigation, and conversion calls to action.
+- [x] Correct mobile spacing, typography, section sizing, and contact-page form flow for phone viewports.
+- [x] Verify the public site, authentication entry, and contact page across desktop and mobile.
+- [x] Add Create account and Log in options to the main landing-page conversion areas.
+- [x] Re-verify every public route at desktop and mobile widths after the authentication and responsive updates.
+- [x] Verify the visible account-entry controls start the nonce-protected authentication flow.

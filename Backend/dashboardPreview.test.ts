@@ -10,4 +10,15 @@ describe("FerixBuilder preview dashboard", () => {
     expect(dashboardSections.map(([title]) => title)).toEqual(["WORKSPACE", "BUSINESS", "CARE"]);
     expect(dashboardTasks).toHaveLength(5);
   });
+
+  it("maps every customer-workspace navigation item to a dedicated route", () => {
+    const routes = dashboardSections.flatMap(([, items]) => items.map(([, , href]) => href));
+
+    expect(routes).toEqual([
+      "/dashboard", "/workspace/project", "/workspace/preview", "/workspace/revisions", "/workspace/payments", "/workspace/downloads",
+      "/workspace/customers", "/workspace/products", "/workspace/bookings", "/workspace/domain",
+      "/workspace/technical-care", "/workspace/system-health", "/workspace/support",
+    ]);
+    expect(new Set(routes).size).toBe(13);
+  });
 });

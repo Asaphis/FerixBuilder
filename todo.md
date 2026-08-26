@@ -1,34 +1,11 @@
 # FerixBuilder Feature Tracker
 
 - [x] Establish the exact `Backend`, `Web/frontend`, and `Web/admin` workspace areas.
-- [x] Document workspace responsibilities, local development commands, conventions, and initial delivery roadmap.
-- [x] Define shared TypeScript contracts for workspace areas and future workflow events.
-- [x] Define secure backend boundaries for authenticated API access, database access, notifications, and private-file authorization.
-- [x] Create an editorially styled public customer entry experience under `Web/frontend`.
-- [x] Create a protected internal operations entry point under `Web/admin`.
-- [x] Prepare notification and secure-file service contracts for future delivery workflows.
-- [x] Add and run unit tests for the workspace contracts.
-- [x] Verify the preview, type checks, and test suite.
-- [x] Connect the public Start your project CTA to the authenticated customer entry flow.
-- [x] Remove the public and internal user-interface implementation, leaving an empty application surface.
-- [x] Build the animated Anton-powered FerixBuilder landing page with conversion paths.
-- [x] Create real public routes for services, pricing, examples, how it works, about, contact, FAQ, privacy, terms, and refund policy.
-- [x] Build shared responsive navigation, footer, and purposeful motion across the public website.
-- [x] Add and verify the contact form interaction and page-level route navigation.
-- [x] Test the new public website across desktop and mobile viewports.
-- [x] Implement the secure Backend contact enquiry submission flow with success and error states.
-- [x] Verify the complete public route set and shared navigation at mobile size.
-- [x] Remove the current landing page, public routes, navigation, animations, and visual assets so the interface is entirely empty.
-- [x] Preserve the Backend, database contact-enquiry capability, and named workspace structure for the reference-matched rebuild.
-- [x] Define and implement the original FerixBuilder dark purple visual system based on the supplied reference.
-- [x] Build the complete conversion-focused landing page with hero, services, process, examples, pricing, and action bar.
-- [x] Create real public routes for services, how it works, examples, pricing, about, FAQ, and contact using the shared system.
-- [x] Build shared responsive navigation, footer, and purposeful motion across the public website.
-- [x] Add dedicated Log in and Create account pages using the existing secure authentication service.
 - [x] Build a preview-mode customer dashboard with project status, timeline, preview, progress, activity, support, and account panels.
-- [x] Add responsive desktop sidebar and mobile dashboard navigation with stacked content layouts.
-- [x] Route Log in and Create account directly to the dashboard during preview, without requiring a real session.
-- [x] Add a persistent bottom dashboard navigation with Home, Project, Preview, Support, and Workspace menu access.
-- [x] Build a complete full-height mobile workspace drawer containing every desktop sidebar item and section.
-- [x] Preserve every dashboard card and detail on mobile with compact two-column cards and readable stacked panels.
-- [x] Verify every mobile bottom-navigation action, drawer item, drawer close control, and complete dashboard content accessibility.
+- [x] Add a complete full-height mobile workspace drawer containing every desktop sidebar item and section.
+- [x] Create a shared customer-workspace application shell with a route-aware desktop sidebar and mobile navigation.
+- [x] Build separate routes for Dashboard, My Project, Preview Website, Revisions, Payments, and Downloads.
+- [x] Build separate routes for Customers, Products, Bookings, Domain, Technical Care, System Health, and Support.
+- [x] Route every desktop sidebar item and mobile workspace item to its dedicated dashboard page.
+- [x] Exercise every desktop sidebar and persistent mobile bottom-navigation route through shared navigation.
+- [x] Click every mobile workspace-drawer route and confirm all 13 dedicated customer-workspace pages load through mobile navigation.

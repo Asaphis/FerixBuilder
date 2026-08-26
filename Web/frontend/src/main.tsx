@@ -5,4 +5,5 @@ import "./responsive.css";
 import "./auth-cta.css";
 import "./dashboard.css";
 import "./dashboard-mobile.css";
+import "./workspace.css";
 createRoot(document.getElementById("root")!).render(<App />);

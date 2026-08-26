@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { contactInquiries, InsertContactInquiry, InsertUser, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,12 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function createContactInquiry(input: InsertContactInquiry): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Contact enquiries are temporarily unavailable.");
+  }
+
+  const result = await db.insert(contactInquiries).values(input);
+  return Number(result[0].insertId);
+}

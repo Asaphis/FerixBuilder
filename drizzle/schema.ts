@@ -25,4 +25,17 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/** Public enquiries submitted through the FerixBuilder contact experience. */
+export const contactInquiries = mysqlTable("contactInquiries", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 160 }).notNull(),
+  businessName: varchar("businessName", { length: 160 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  serviceType: varchar("serviceType", { length: 80 }).notNull(),
+  message: text("message").notNull(),
+  status: mysqlEnum("status", ["new", "reviewing", "responded", "closed"]).default("new").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ContactInquiry = typeof contactInquiries.$inferSelect;
+export type InsertContactInquiry = typeof contactInquiries.$inferInsert;

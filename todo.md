@@ -11,3 +11,10 @@
 - [x] Verify the preview, type checks, and test suite.
 - [x] Connect the public Start your project CTA to the authenticated customer entry flow.
 - [x] Remove the public and internal user-interface implementation, leaving an empty application surface.
+- [x] Build the animated Anton-powered FerixBuilder landing page with conversion paths.
+- [x] Create real public routes for services, pricing, examples, how it works, about, contact, FAQ, privacy, terms, and refund policy.
+- [x] Build shared responsive navigation, footer, and purposeful motion across the public website.
+- [x] Add and verify the contact form interaction and page-level route navigation.
+- [x] Test the new public website across desktop and mobile viewports.
+- [x] Implement the secure Backend contact enquiry submission flow with success and error states.
+- [x] Verify the complete public route set and shared navigation at mobile size.

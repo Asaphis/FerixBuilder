@@ -18,3 +18,5 @@
 - [x] Test the new public website across desktop and mobile viewports.
 - [x] Implement the secure Backend contact enquiry submission flow with success and error states.
 - [x] Verify the complete public route set and shared navigation at mobile size.
+- [x] Remove the current landing page, public routes, navigation, animations, and visual assets so the interface is entirely empty.
+- [x] Preserve the Backend, database contact-enquiry capability, and named workspace structure for the reference-matched rebuild.

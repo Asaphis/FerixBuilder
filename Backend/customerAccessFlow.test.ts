@@ -3,6 +3,7 @@ import {
   completePreviewOnboarding,
   getOnboardingDraft,
   getPreviewAccount,
+  saveProjectBrief,
   registerPreviewAccount,
   saveOnboardingDraft,
   signInPreviewAccount,
@@ -27,9 +28,10 @@ afterEach(() => store.clear());
 
 describe("preview customer access flow", () => {
   it("keeps a new registration separate from verification and project onboarding", () => {
+    saveProjectBrief({ name: "Ada Lead", businessName: "Ada Fashion", email: "lead@example.com", projectType: "Online store", context: "Responsive ordering" });
     const account = registerPreviewAccount({ fullName: "Ada Customer", email: "ADA@EXAMPLE.COM", phone: "+2347000000000" });
     expect(account).toMatchObject({ email: "ada@example.com", emailVerified: false, signedIn: false, onboardingComplete: false });
-    expect(getOnboardingDraft()).toMatchObject({ businessEmail: "ada@example.com", businessPhone: "+2347000000000" });
+    expect(getOnboardingDraft()).toMatchObject({ businessName: "Ada Fashion", projectType: "Online store", requirements: "Responsive ordering", businessEmail: "ada@example.com", businessPhone: "+2347000000000" });
   });
 
   it("routes the verified account through onboarding until a request is submitted", () => {

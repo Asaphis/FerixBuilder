@@ -16,3 +16,8 @@
 - [x] Test new-user and returning-user journeys at desktop and mobile widths.
 - [x] Add distinct optional social-channel fields and explicit brand-colour and brand-guide choices to onboarding.
 - [x] Exercise and record the complete new-user and returning-user journeys interactively at phone width.
+- [x] Create a distinct Start your project brief page matching the required name, business, email, direction, and context flow.
+- [x] Route every Start your project button to the new brief page while keeping Create account dedicated to registration.
+- [x] Connect project-brief submission to the correct account-aware registration and onboarding handoff.
+- [x] Validate the new brief route and its mobile layout with the customer entry journey.
+- [x] Run and record a phone-width project-brief submission through registration, verification, and onboarding prefill without creating a real contact enquiry.

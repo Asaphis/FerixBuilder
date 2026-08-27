@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle2, MailCheck, ShieldCheck, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { getPreviewAccount, registerPreviewAccount, signInPreviewAccount, verifyPreviewAccount } from "@/lib/customerAccess";
+import { getPreviewAccount, getProjectBrief, registerPreviewAccount, signInPreviewAccount, verifyPreviewAccount } from "@/lib/customerAccess";
 
 export default function AuthPage({ mode }: { mode: "login" | "register" | "verify" | "forgot" | "reset" }) {
   const isLogin = mode === "login";
@@ -9,10 +9,10 @@ export default function AuthPage({ mode }: { mode: "login" | "register" | "verif
   const isVerify = mode === "verify";
   const isForgot = mode === "forgot";
   const [, setLocation] = useLocation();
-  const [fullName, setFullName] = useState(""); const [email, setEmail] = useState(""); const [phone, setPhone] = useState(""); const [password, setPassword] = useState(""); const [confirmPassword, setConfirmPassword] = useState(""); const [acceptedTerms, setAcceptedTerms] = useState(false); const [code, setCode] = useState(""); const [feedback, setFeedback] = useState(""); const account = getPreviewAccount();
+  const projectBrief = getProjectBrief(); const [fullName, setFullName] = useState(() => projectBrief?.name ?? ""); const [email, setEmail] = useState(() => projectBrief?.email ?? ""); const [phone, setPhone] = useState(""); const [password, setPassword] = useState(""); const [confirmPassword, setConfirmPassword] = useState(""); const [acceptedTerms, setAcceptedTerms] = useState(false); const [code, setCode] = useState(""); const [feedback, setFeedback] = useState(""); const account = getPreviewAccount();
   const heading = isLogin ? "PICK UP WHERE YOU LEFT OFF." : isVerify ? "VERIFY YOUR ACCOUNT." : isForgot || mode === "reset" ? "GET BACK INTO YOUR ACCOUNT." : "START WITH A CLEARER FIRST STEP.";
   const title = isLogin ? "Welcome back" : isVerify ? "Check your email" : isForgot ? "Forgot your password?" : mode === "reset" ? "Create a new password" : "Create your account";
-  const intro = isLogin ? "Sign in to continue with the project you have already set up." : isVerify ? `We sent a verification code to ${account?.email ?? "your email address"}.` : isForgot ? "Enter your email and we will prepare a reset route in this preview." : mode === "reset" ? "Choose a new password for your preview account." : "Create your account first. Business and project details come next in a guided setup.";
+  const intro = isLogin ? "Sign in to continue with the project you have already set up." : isVerify ? `We sent a verification code to ${account?.email ?? "your email address"}.` : isForgot ? "Enter your email and we will prepare a reset route in this preview." : mode === "reset" ? "Choose a new password for your preview account." : projectBrief ? "Your project brief is ready. Create your account to track it and finish the guided setup." : "Create your account first. Business and project details come next in a guided setup.";
   const passwordIsValid = password.length >= 8 && /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password) && /[^A-Za-z0-9]/.test(password);
   const submit = () => {
     setFeedback("");

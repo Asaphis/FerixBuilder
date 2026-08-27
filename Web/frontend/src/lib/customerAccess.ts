@@ -7,6 +7,14 @@ export type PreviewAccount = {
   onboardingComplete: boolean;
 };
 
+export type ProjectBrief = {
+  name: string;
+  businessName: string;
+  email: string;
+  projectType: string;
+  context: string;
+};
+
 export type OnboardingDraft = {
   businessName: string;
   category: string;
@@ -37,6 +45,7 @@ export type OnboardingDraft = {
 
 const ACCOUNT_KEY = "ferixbuilder.preview.account";
 const DRAFT_KEY = "ferixbuilder.preview.onboarding";
+const BRIEF_KEY = "ferixbuilder.preview.project-brief";
 
 const emptyDraft: OnboardingDraft = {
   businessName: "", category: "", description: "", businessPhone: "", whatsapp: "", businessEmail: "", address: "", city: "", state: "", country: "", openingHours: "", instagram: "", facebook: "", tiktok: "", xProfile: "", youtube: "", projectType: "", contentNote: "", brandStyle: "", brandColours: "", brandSource: "", inspirationUrl: "", inspirationNote: "", requirements: "", managementPreference: "",
@@ -57,11 +66,14 @@ function write<T>(key: string, value: T) {
 
 export function getPreviewAccount() { return read<PreviewAccount>(ACCOUNT_KEY); }
 export function getOnboardingDraft() { return read<OnboardingDraft>(DRAFT_KEY) ?? emptyDraft; }
+export function getProjectBrief() { return read<ProjectBrief>(BRIEF_KEY); }
+export function saveProjectBrief(brief: ProjectBrief) { write(BRIEF_KEY, brief); }
 
 export function registerPreviewAccount(values: Pick<PreviewAccount, "fullName" | "email" | "phone">) {
   const account: PreviewAccount = { ...values, email: values.email.trim().toLowerCase(), emailVerified: false, signedIn: false, onboardingComplete: false };
+  const brief = getProjectBrief();
   write(ACCOUNT_KEY, account);
-  write(DRAFT_KEY, { ...emptyDraft, businessEmail: account.email, businessPhone: account.phone });
+  write(DRAFT_KEY, { ...emptyDraft, businessName: brief?.businessName ?? "", projectType: brief?.projectType ?? "", requirements: brief?.context ?? "", businessEmail: account.email, businessPhone: account.phone });
   return account;
 }
 

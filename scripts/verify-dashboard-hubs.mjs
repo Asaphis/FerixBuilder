@@ -226,6 +226,42 @@ try {
   const drawerOverflow = await mobile.locator(".dash-sidebar-scroll").evaluate((element) => getComputedStyle(element).overflowY);
   if (drawerOverflow !== "auto") throw new Error("Mobile workspace navigation is not independently scrollable");
   await mobile.locator(".dash-sidebar.mobile-open").getByText("Settings", { exact: true }).isVisible();
+  for (const route of ["/workspace/project", "/workspace/review", "/workspace/delivery", "/workspace/business", "/workspace/care", "/workspace/support", "/workspace/settings"]) {
+    await mobile.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+    const mobileClearance = await mobile.evaluate(() => {
+      const main = document.querySelector(".dash-main");
+      const bottomNav = document.querySelector(".dash-bottom-nav");
+      return {
+        mainPaddingBottom: main ? Number.parseFloat(getComputedStyle(main).paddingBottom) : 0,
+        navHeight: bottomNav ? bottomNav.getBoundingClientRect().height : 0,
+      };
+    });
+    if (mobileClearance.mainPaddingBottom < mobileClearance.navHeight) throw new Error(`${route} lacks clearance above mobile navigation`);
+  }
+
+  const narrowPhone = await browser.newPage({ viewport: { width: 360, height: 800 } });
+  const lastWorkflowControls = [
+    ["/workspace/project", ".workflow-card .form-actions .dash-primary"],
+    ["/workspace/review", ".workflow-card .form-actions .dash-primary"],
+    ["/workspace/delivery", "button.dash-primary.wide"],
+    ["/workspace/business", ".business-records-board .dash-primary"],
+    ["/workspace/care", "button.dash-primary.wide"],
+    ["/workspace/support", ".message-composer button"],
+    ["/workspace/settings", ".member-panel button"],
+  ];
+  for (const phonePage of [mobile, narrowPhone]) {
+    for (const [route, selector] of lastWorkflowControls) {
+      await phonePage.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+      const control = phonePage.locator(selector).last();
+      await control.scrollIntoViewIfNeeded();
+      const visibility = await control.evaluate((element) => {
+        const controlRect = element.getBoundingClientRect();
+        const navRect = document.querySelector(".dash-bottom-nav")?.getBoundingClientRect();
+        return { controlBottom: controlRect.bottom, navTop: navRect?.top ?? window.innerHeight };
+      });
+      if (visibility.controlBottom > visibility.navTop - 8) throw new Error(`${route} final workflow control is obscured by mobile navigation`);
+    }
+  }
   console.log("Dashboard hubs verified: intercepted public-form submission, lifecycle loading and success feedback, 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, phone interactions, and 320px overflow safety.");
 } finally {
   await browser.close();

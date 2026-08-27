@@ -84,3 +84,11 @@
 - [x] Verify the divided workflow layouts and scroll behavior across customer pages at desktop and phone widths.
 - [x] Correct the customer sidebar and mobile workspace drawer so their navigation content itself can scroll independently.
 - [x] Verify sidebar scroll behavior and navigation reachability on desktop and mobile without changing the approved workspace layout.
+- [x] Map every repeated full-width detail block inside Project, Review, Delivery, Business, Care, Support, and Settings workflows.
+- [x] Convert those repeated lower detail blocks into compact two-column responsive grids with a balanced full-width final card where needed.
+- [x] Verify the compact grids preserve every heading, form, action, workflow state, and mobile bottom-navigation clearance.
+- [x] Audit and record the Review workflow’s repeated feedback-stage blocks in the compact-grid mapping.
+- [x] Capture fresh 390px and 360px compact-grid screenshots for every affected customer workflow, including Review.
+- [x] Assert the compact-grid routes retain clear space above the mobile bottom navigation and no final workflow controls are obscured.
+- [x] Assert the final interactive control on each compact-grid workflow route remains unobscured above the mobile bottom navigation at 390px and 360px.
+- [x] Complete a final visual pass confirming the last actionable controls are not covered by mobile navigation on every affected page.

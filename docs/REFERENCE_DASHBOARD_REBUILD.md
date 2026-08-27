@@ -45,3 +45,11 @@ The user-approved upper delivery boards and material panels remain unchanged. Th
 ## Divided detailed layouts and navigation scrolling
 
 Long detailed workflow surfaces now use a primary content column and a connected lifecycle, status, or data-context column on desktop. The Project scope and quote section, payment and release, business record workspace, care operations, settings preferences, and delivery checklist therefore present related content side by side rather than as one very long vertical block. At phone size, the same groups stack in a readable order. The customer sidebar now has its own dedicated scroll region; this applies to the desktop navigation and the mobile workspace drawer, while the profile remains anchored separately.
+
+## Compact repeated-detail grids
+
+The repeated information blocks inside detailed workflow cards now use the same compact two-column rhythm as the Dashboard’s status cards. This specifically covers Project’s Core delivery, Review allowance, and Handover route; Care’s four service choices; Business module and data-boundary blocks; Delivery’s lifecycle stages; Support’s project-context blocks; and Settings notification preferences. On phone screens, two blocks sit side by side and an odd final block spans the card width. This reduces long vertical stacks while leaving page headings, input areas, forms, actions, top cards, and customer workflow behavior unchanged.
+
+Review’s three feedback-stage blocks use the same compact grid, alongside the other affected journeys. Fresh full-page visual checks were completed at both 390px and 360px for Project, Review, Delivery, Business tools, Care, Support, and Settings; the repeated blocks retain their paired-card rhythm and the workspace content remains clear of the persistent mobile navigation.
+
+For each of those routes, automated checks now scroll the final relevant workflow control into view at both 390px and 360px and confirm that it sits above the fixed bottom navigation. This complements the full-page visual pass and protects both interaction reachability and mobile clearance.

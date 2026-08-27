@@ -21,4 +21,5 @@ import "./workflow-balance.css";
 import "./workflow-card-alignment.css";
 import "./workflow-columns.css";
 import "./sidebar-scroll.css";
+import "./workflow-detail-grids.css";
 createRoot(document.getElementById("root")!).render(<App />);

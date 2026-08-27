@@ -27,3 +27,7 @@ The live browser view confirms that the onboarding route presents its Save and c
 The Settings save action was exercised in the live browser. It displayed the persistent “Preferences saved in preview” confirmation directly within the page, confirming that the action is no longer a transient notice.
 
 The Onboarding save-later action was also exercised in the live browser. It displayed the persistent “Draft saved in preview” confirmation within the onboarding card, confirming that the workflow retains its local preview outcome visibly rather than relying on a toast.
+
+## Unlocked preview navigation update
+
+The dashboard preview guard was removed for every customer workspace route. In a live browser check, the public dashboard opened successfully and the visible desktop sidebar Settings link navigated to `/workspace/settings` without redirecting to Login. A repeatable browser verification also confirmed that all 17 customer workspace routes remain directly accessible on desktop and at a 390px phone viewport in preview mode.

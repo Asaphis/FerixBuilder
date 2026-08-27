@@ -25,3 +25,5 @@
 - [x] Preserve the separate Start your project, Create account, verification, and onboarding routes while preview login is enabled.
 - [x] Verify direct dashboard access from Login at desktop and phone widths.
 - [x] Exercise and record the visible phone-width public Login action opening the dashboard directly.
+- [x] Remove the preview access guard from every customer workspace route so dashboard navigation never redirects to Login during review.
+- [x] Verify all desktop sidebar and mobile workspace navigation destinations remain open in preview mode.

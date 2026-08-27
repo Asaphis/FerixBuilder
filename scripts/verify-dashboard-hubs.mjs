@@ -126,9 +126,9 @@ try {
     if (mobile.url().includes("/login")) throw new Error(`Phone ${route} redirected to Login`);
     await mobile.locator(".workspace-shell").isVisible();
   }
-  for (const [route] of journeyContextChecks) {
+  for (const [route, contextLabel] of journeyContextChecks) {
     await mobile.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
-    await mobile.locator("#customer-workflow .workflow-surface").isVisible();
+    await mobile.locator(".journey-context-grid").getByText(contextLabel, { exact: true }).isVisible();
   }
 
   const compactPhone = await browser.newPage({ viewport: { width: 320, height: 740 } });

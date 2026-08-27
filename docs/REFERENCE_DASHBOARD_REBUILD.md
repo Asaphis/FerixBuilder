@@ -37,7 +37,3 @@ The previous desktop-side workflow cards no longer collapse as isolated, undersi
 Business tools now follows the same composition within its own record workspace: an active-module/context row, a distinct directory board for search, filters, exports, and record creation, plus paired export and selected-record context panels. The customer can still add records, filter them, search them, open their detail, and prepare a protected preview export, but those controls now sit in balanced, grouped sections on both desktop and mobile.
 
 The post-rebuild browser checks now explicitly exercise record addition, search, active-only filtering and reset, protected preview export, and record opening at both desktop and 390px phone widths. This confirms that the visual regrouping did not remove the existing business-data interactions.
-
-## Unified page hierarchy
-
-The page-level dashboard summary and cockpit layers were removed from the non-dashboard routes where they repeated the information and actions already present in the workflow. Each journey now moves directly from its workspace heading and contextual tab control into its own complete operational surface. This removes the disconnected **Project materials** card that previously sat above the separate **Project scope and quote** card. The related project material remains accessible through the Project files tab and the scope surface retains its connected delivery, review, and quote-status information. The same unified hierarchy now applies to Review, Delivery, Business tools, Care, Support, and Settings.

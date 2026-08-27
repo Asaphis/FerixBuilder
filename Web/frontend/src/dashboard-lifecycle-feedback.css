@@ -1,0 +1,10 @@
+.reference-dashboard button:disabled{cursor:wait;opacity:.8}
+.lifecycle-loading{animation:lifecycle-spin .72s linear infinite}
+.dash-notice{animation:dashboard-notice-in .2s cubic-bezier(.23,1,.32,1) both}
+.lifecycle-panel-busy{position:relative}
+.lifecycle-panel-busy>*:not(.lifecycle-panel-feedback){pointer-events:none}
+.lifecycle-panel-feedback{position:absolute;z-index:5;top:12px;right:12px;display:inline-flex;align-items:center;gap:8px;border:1px solid #dcd0ff;border-radius:8px;background:#fff;box-shadow:0 10px 24px #4d38a429;padding:9px 11px;color:#6840d5;font-size:10px;font-weight:800}
+@keyframes lifecycle-spin{to{transform:rotate(360deg)}}
+@keyframes dashboard-notice-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:780px){.lifecycle-panel-feedback{top:8px;right:8px;left:8px;justify-content:center;font-size:9px}}
+@media (prefers-reduced-motion:reduce){.lifecycle-loading{animation:none}.dash-notice{animation:none}}

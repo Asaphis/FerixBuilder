@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from "react";
+import { useState, type ComponentType, type MouseEvent } from "react";
 import {
   Bell,
   CalendarDays,
@@ -11,6 +11,7 @@ import {
   Globe2,
   Headphones,
   LayoutDashboard,
+  LoaderCircle,
   Menu,
   MessageCircle,
   PackageCheck,
@@ -147,6 +148,7 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [heroActionVersion, setHeroActionVersion] = useState(0);
+  const [workflowLoading, setWorkflowLoading] = useState<string | null>(null);
   const account = getPreviewAccount();
   const accountName = account?.fullName || "FerixBuilder customer";
   const info = hubs[page];
@@ -187,6 +189,25 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
     ? "dashboard"
     : href.split("/").pop()?.replace("operations", "care").replace("tools", "business") ?? "";
 
+  const workflowMessages: Record<string, string> = {
+    "Review quote decision": "Quote decision is ready for your review in preview mode.",
+    "Share private preview": "Private preview sharing details are ready in preview mode.",
+    "Request changes": "Revision workspace is ready for your feedback.",
+    "Confirm approval": "Preview approval has been recorded in this preview.",
+    "Create request": "Revision request has been created in this preview.",
+    "View payment route": "The protected payment route is ready to review in preview mode.",
+  };
+
+  const handleWorkflowLifecycleAction = (event: MouseEvent<HTMLElement>) => {
+    const action = (event.target as HTMLElement).closest("button")?.textContent?.replace(/\s+/g, " ").trim();
+    if (!action || !workflowMessages[action] || workflowLoading) return;
+    setWorkflowLoading(action);
+    window.setTimeout(() => {
+      setWorkflowLoading(null);
+      notify(workflowMessages[action]);
+    }, 520);
+  };
+
   return (
     <div className="dashboard-shell workspace-shell hub-shell">
       <button aria-label="Close workspace menu" className={mobileOpen ? "drawer-backdrop open" : "drawer-backdrop"} onClick={() => setMobileOpen(false)} />
@@ -223,7 +244,7 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
         </header>
 
         {page === "dashboard" ? (
-          <DashboardOverview navigate={navigate} accountName={accountName} />
+          <DashboardOverview navigate={navigate} accountName={accountName} notify={notify} />
         ) : (
           <>
             <section className="workspace-hero hub-hero">
@@ -234,7 +255,13 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
               {info.tabs && <nav className="hub-tabs" aria-label={`${info.title} sections`}>
                 {info.tabs.map((tab) => <button key={tab.id} className={selectedTab?.id === tab.id ? "active" : ""} onClick={() => tabSelect(tab)}>{tab.label}</button>)}
               </nav>}
-              <div className="hub-panel" id="customer-workflow">
+              <JourneyContext page={page} activeTab={selectedTab?.label} navigate={navigate} />
+              <JourneyCockpit page={page} activeTab={selectedTab?.id} onTabSelect={(tabId) => {
+                const tab = info.tabs?.find((item) => item.id === tabId);
+                if (tab) tabSelect(tab);
+              }} navigate={navigate} />
+              <div className={workflowLoading ? "hub-panel lifecycle-panel-busy" : "hub-panel"} id="customer-workflow" onClick={handleWorkflowLifecycleAction} aria-busy={Boolean(workflowLoading)}>
+                {workflowLoading && <div className="lifecycle-panel-feedback" role="status" aria-live="polite"><LoaderCircle className="lifecycle-loading" size={16} /><span>Updating your project lifecycle…</span></div>}
                 <FeatureSurface page={selectedTab?.surface ?? page} notify={notify} navigate={navigate} heroAction={page === "support" ? "support" : page === "settings" ? "settings" : undefined} heroActionVersion={heroActionVersion} />
               </div>
             </section>
@@ -251,23 +278,95 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
         <Link href="/workspace/support" className={visiblePage === "support" ? "active" : ""}><CircleHelp size={18} /><span>Support</span></Link>
         <button onClick={() => setMobileOpen(true)}><Menu size={18} /><span>Workspace</span></button>
       </nav>
-      {notice && <div className="dash-notice"><Check size={15} /> {notice}</div>}
+      {notice && <div className="dash-notice" role="status" aria-live="polite"><Check size={15} /> {notice}</div>}
     </div>
   );
 }
 
-function DashboardOverview({ navigate, accountName }: { navigate: (path: string) => void; accountName: string }) {
+const journeyContext: Record<Exclude<WorkspacePageKey, "dashboard">, readonly [IconType, string, string, string, IconType, string][]> = {
+  project: [[FolderKanban, "Project status", "Scope review", "Requirements are being confirmed", CalendarDays, "Project timeline"], [Check, "Next action", "Keep scope current", "Add details or project material", FolderKanban, "Project workspace"], [Globe2, "Materials", "Private workspace", "Brief, scope, and files in one place", ShieldCheck, "Protected"]],
+  review: [[Eye, "Preview version", "Version 01", "Ready for your review", Check, "Review required"], [CircleHelp, "Revision rounds", "2 included", "Use clear feedback for each change", MessageCircle, "Feedback"], [ShieldCheck, "Decision stage", "Approval follows review", "Nothing is charged at this stage", WalletCards, "Controlled"]],
+  delivery: [[WalletCards, "Payment status", "Not due", "Scope confirmation comes first", Check, "Controlled release"], [FolderKanban, "Delivery gate", "Scope review", "Quote decisions stay connected", Eye, "Preview first"], [Download, "Release status", "Protected", "Files release after verification", ShieldCheck, "Secure delivery"]],
+  business: [[PackageCheck, "Active module", "Business tools", "Use only the data tools your project includes", FolderKanban, "Scoped access"], [UserRound, "Customer data", "Preview-local", "Add, filter, and review records here", Search, "Searchable"], [ShieldCheck, "Data boundary", "Your business only", "Records remain isolated by module", Check, "Private"]],
+  care: [[ShieldCheck, "Management status", "Not requested", "Optional services are reviewed before activation", CircleHelp, "Request review"], [Globe2, "Operations scope", "Permitted details", "Domain, care, and health summaries", Check, "Controlled"], [Bell, "Service updates", "Workspace alerts", "Notifications remain in your account settings", Settings2, "Preferences"]],
+  support: [[Headphones, "Support route", "Project context attached", "Every question stays connected to this delivery", Check, "Contextual"], [ShieldCheck, "Attachments", "Private", "Project materials are kept in the workspace", FolderKanban, "Protected"], [Bell, "Response updates", "2 enabled", "Manage update preferences from Settings", Settings2, "Notifications"]],
+  settings: [[UserRound, "Workspace profile", "Ready", "Your customer account information", Check, "Saved locally"], [Bell, "Notifications", "2 enabled", "Project and support updates are on", MessageCircle, "Connected"], [ShieldCheck, "Workspace access", "Business owner", "Member access stays controlled", Settings2, "Preferences"]],
+};
+
+function JourneyContext({ page, activeTab, navigate }: { page: Exclude<WorkspacePageKey, "dashboard">; activeTab?: string; navigate: (path: string) => void }) {
+  const cards = journeyContext[page];
+  const paths: Record<Exclude<WorkspacePageKey, "dashboard">, string> = {
+    project: "/workspace/project", review: "/workspace/review", delivery: "/workspace/delivery", business: "/workspace/business", care: "/workspace/care", support: "/workspace/support", settings: "/workspace/settings",
+  };
+
+  return <section className="journey-context-grid" aria-label={`${page} workspace context`}>
+    {cards.map(([Icon, label, value, detail, Signal, signal]) => <article className="journey-context-card" key={label}>
+      <span className="journey-context-icon"><Icon size={17} /></span>
+      <div><p>{label}</p><b>{value}</b><small>{detail}</small></div>
+      <button onClick={() => navigate(paths[page])} aria-label={`Open ${label.toLowerCase()} details`}><Signal size={14} /><span>{signal}</span></button>
+    </article>)}
+  </section>;
+}
+
+function JourneyCockpit({ page, activeTab, onTabSelect, navigate }: { page: Exclude<WorkspacePageKey, "dashboard">; activeTab?: string; onTabSelect: (tab: string) => void; navigate: (path: string) => void }) {
+  if (page === "project") return <section className="journey-cockpit project-cockpit" aria-label="Project delivery overview">
+    <article className="cockpit-primary"><header><div><p>PROJECT DELIVERY BOARD</p><h2>Scope, materials, and next checkpoint.</h2></div><span className="cockpit-state active">Scope review</span></header><div className="cockpit-steps"><div className="done"><i><Check size={13} /></i><b>Brief received</b><span>Complete</span></div><div className="current"><i>2</i><b>Scope confirmation</b><span>In progress</span></div><div><i>3</i><b>Build starts</b><span>Next</span></div><div><i>4</i><b>Private preview</b><span>Queued</span></div></div><footer><button className={activeTab === "scope" ? "cockpit-action active" : "cockpit-action"} onClick={() => onTabSelect("scope")}>Review scope</button><button className={activeTab === "files" ? "cockpit-action active" : "cockpit-action"} onClick={() => onTabSelect("files")}>Open materials</button></footer></article>
+    <aside className="cockpit-side-card"><span><FolderKanban size={18} /></span><p>PROJECT MATERIALS</p><h3>Everything stays connected.</h3><div className="cockpit-data"><b>Brief</b><span>Submitted</span><b>Files</b><span>Private workspace</span><b>Next step</b><span>Confirm scope</span></div><button onClick={() => onTabSelect("brief")}>Update project brief <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  if (page === "review") return <section className="journey-cockpit review-cockpit" aria-label="Private preview review overview">
+    <article className="cockpit-preview-stage"><header><div><p>PRIVATE PREVIEW / VERSION 01</p><h2>Review the experience before approval.</h2></div><span className="cockpit-state">Review stage</span></header><div className="cockpit-mini-preview"><div><span></span><span></span><span></span><b>ferixbuilder preview</b></div><section><small>PRIVATE WEBSITE PREVIEW</small><h3>Your business,<br /><strong>made clearer.</strong></h3><button onClick={() => onTabSelect("preview")}>Open preview</button></section></div></article>
+    <aside className="cockpit-side-card"><span><CircleHelp size={18} /></span><p>REVIEW CHECKPOINT</p><h3>Two feedback rounds included.</h3><div className="cockpit-data"><b>Current version</b><span>Version 01</span><b>Feedback route</b><span>Structured revisions</span><b>Decision</b><span>Approval after review</span></div><button onClick={() => onTabSelect("changes")}>Request changes <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  if (page === "delivery") return <section className="journey-cockpit delivery-cockpit" aria-label="Delivery gate overview">
+    <article className="cockpit-primary"><header><div><p>CONTROLLED DELIVERY GATES</p><h2>Every delivery step remains clear.</h2></div><span className="cockpit-state">Not due</span></header><div className="cockpit-gates"><div className="done"><Check size={14} /><b>Review</b><span>Preview reviewed</span></div><div><span>02</span><b>Scope</b><span>Awaiting confirmation</span></div><div><span>03</span><b>Payment</b><span>Not due</span></div><div><span>04</span><b>Release</b><span>Protected</span></div></div><footer><button className={activeTab === "payment" ? "cockpit-action active" : "cockpit-action"} onClick={() => onTabSelect("payment")}>Quote & payment</button><button className={activeTab === "release" ? "cockpit-action active" : "cockpit-action"} onClick={() => onTabSelect("release")}>Delivery release</button></footer></article>
+    <aside className="cockpit-side-card"><span><ShieldCheck size={18} /></span><p>DELIVERY SAFEGUARD</p><h3>Release follows verification.</h3><div className="cockpit-data"><b>Quote</b><span>Awaiting scope</span><b>Invoice</b><span>Not issued</span><b>Files</b><span>Protected until release</span></div><button onClick={() => navigate("/workspace/review")}>Return to review <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  if (page === "business") return <section className="journey-cockpit business-cockpit" aria-label="Business tools overview">
+    <article className="cockpit-primary"><header><div><p>BUSINESS OPERATIONS</p><h2>Keep application data in the right place.</h2></div><span className="cockpit-state active">Private workspace</span></header><div className="cockpit-module-grid"><button className={activeTab === "customers" ? "active" : ""} onClick={() => onTabSelect("customers")}><UserRound size={18} /><b>Customers</b><span>Contacts and records</span></button><button className={activeTab === "products" ? "active" : ""} onClick={() => onTabSelect("products")}><PackageCheck size={18} /><b>Products</b><span>Services and offers</span></button><button className={activeTab === "bookings" ? "active" : ""} onClick={() => onTabSelect("bookings")}><CalendarDays size={18} /><b>Bookings</b><span>Appointments and requests</span></button></div><footer><span>Only relevant, permitted business modules appear here.</span></footer></article>
+    <aside className="cockpit-side-card"><span><ShieldCheck size={18} /></span><p>BUSINESS DATA BOUNDARY</p><h3>Your records stay isolated.</h3><div className="cockpit-data"><b>Workspace</b><span>FerixBuilder customer</span><b>Access</b><span>Business owner</span><b>Export</b><span>Preview controlled</span></div><button onClick={() => onTabSelect("customers")}>Open customer tools <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  if (page === "care") return <section className="journey-cockpit care-cockpit" aria-label="Care and operations overview">
+    <article className="cockpit-primary"><header><div><p>CARE & OPERATIONS BOARD</p><h2>See optional care without exposing infrastructure.</h2></div><span className="cockpit-state">Optional</span></header><div className="cockpit-module-grid"><button className={activeTab === "request" ? "active" : ""} onClick={() => onTabSelect("request")}><ShieldCheck size={18} /><b>Management</b><span>Request a service review</span></button><button className={activeTab === "domain" ? "active" : ""} onClick={() => onTabSelect("domain")}><Globe2 size={18} /><b>Domain</b><span>Permitted domain summary</span></button><button className={activeTab === "health" ? "active" : ""} onClick={() => onTabSelect("health")}><Sparkles size={18} /><b>Health</b><span>System health summary</span></button></div><footer><span>Services are reviewed before any management activation.</span></footer></article>
+    <aside className="cockpit-side-card"><span><CircleHelp size={18} /></span><p>SERVICE REQUEST</p><h3>Management is not active yet.</h3><div className="cockpit-data"><b>Hosting</b><span>Not requested</span><b>Technical care</b><span>Not requested</span><b>Notifications</b><span>Workspace alerts</span></div><button onClick={() => onTabSelect("request")}>Request management <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  if (page === "support") return <section className="journey-cockpit support-cockpit" aria-label="Project support overview">
+    <article className="cockpit-primary"><header><div><p>PROJECT SUPPORT DESK</p><h2>Every conversation stays tied to delivery.</h2></div><span className="cockpit-state active">Context attached</span></header><div className="cockpit-support-grid"><div><span><FolderKanban size={17} /></span><b>Project context</b><p>Scope, preview, and delivery stage stay with your message.</p></div><div><span><ShieldCheck size={17} /></span><b>Private attachments</b><p>Files remain inside your customer workspace.</p></div><div><span><Bell size={17} /></span><b>Response updates</b><p>Notifications use your workspace preferences.</p></div></div></article>
+    <aside className="cockpit-side-card"><span><Headphones size={18} /></span><p>SUPPORT STATUS</p><h3>Ready when you need help.</h3><div className="cockpit-data"><b>Open tickets</b><span>None in preview</span><b>Reply route</b><span>Support workspace</span><b>Priority</b><span>Project context</span></div><button onClick={() => document.getElementById("customer-workflow")?.scrollIntoView({ behavior: "smooth", block: "start" })}>Write a support ticket <ChevronDown size={14} /></button></aside>
+  </section>;
+
+  return <section className="journey-cockpit settings-cockpit" aria-label="Account and workspace overview">
+    <article className="cockpit-primary"><header><div><p>ACCOUNT CONTROL CENTRE</p><h2>Manage the customer workspace with confidence.</h2></div><span className="cockpit-state active">Business owner</span></header><div className="cockpit-support-grid"><div><span><UserRound size={17} /></span><b>Workspace profile</b><p>Customer identity and business role remain clear.</p></div><div><span><Bell size={17} /></span><b>Update preferences</b><p>Choose project and support notifications.</p></div><div><span><ShieldCheck size={17} /></span><b>Member access</b><p>Invite permitted collaborators only.</p></div></div></article>
+    <aside className="cockpit-side-card"><span><Settings2 size={18} /></span><p>WORKSPACE PREFERENCES</p><h3>Everything stays customer controlled.</h3><div className="cockpit-data"><b>Profile</b><span>Ready</span><b>Notifications</b><span>2 enabled</span><b>Members</b><span>Business owner</span></div><button onClick={() => document.getElementById("customer-workflow")?.scrollIntoView({ behavior: "smooth", block: "start" })}>Open preferences <ChevronDown size={14} /></button></aside>
+  </section>;
+}
+
+function DashboardOverview({ navigate, accountName, notify }: { navigate: (path: string) => void; accountName: string; notify: (text: string) => void }) {
   const firstName = accountName.split(" ")[0];
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const steps = [["Request submitted", "complete"], ["Requirements reviewed", "complete"], ["Scope confirmation", "current"], ["Private preview", ""], ["Approval", ""], ["Payment", ""], ["Delivery", ""]] as const;
   const statusCards = [[FolderKanban, "Project status", "In progress", "Scope review"], [CircleHelp, "Revisions", "2", "Included rounds"], [Eye, "Preview", "Preparing", "Before approval"], [WalletCards, "Payment", "Not due", "After scope"], [Download, "Delivery", "Locked", "After verification"]] as const;
   const progressItems = [["Requirements review", "Completed", true], ["Scope confirmation", "In progress", false], ["Design & build", "Next", false], ["Preview preparation", "Queued", false]] as const;
   const activities = [[Eye, "Project brief received", "Your requirements are in review"], [FolderKanban, "Scope review started", "Next milestone is being prepared"], [Bell, "Workspace ready", "Keep your files and decisions here"]] as const;
+  const runLifecycleAction = (action: string, successMessage: string, target?: string) => {
+    if (loadingAction) return;
+    setLoadingAction(action);
+    window.setTimeout(() => {
+      setLoadingAction(null);
+      notify(successMessage);
+      if (target) window.setTimeout(() => navigate(target), 620);
+    }, 520);
+  };
 
   return (
     <section className="reference-dashboard">
       <section className="reference-welcome">
         <div><h1>Welcome back, {firstName}</h1><p>Here is what is happening with your project today.</p></div>
-        <button className="dash-primary" onClick={() => navigate("/workspace/project")}><Plus size={17} /> Open project</button>
+        <button className="dash-primary" disabled={Boolean(loadingAction)} aria-busy={loadingAction === "open-project"} onClick={() => runLifecycleAction("open-project", "Project workspace is ready in preview mode.", "/workspace/project")}>{loadingAction === "open-project" ? <><LoaderCircle className="lifecycle-loading" size={17} /> Opening project…</> : <><Plus size={17} /> Open project</>}</button>
       </section>
 
       <section className="reference-status-grid">
@@ -283,7 +382,7 @@ function DashboardOverview({ navigate, accountName }: { navigate: (path: string)
         <article className="reference-project-card">
           <header>
             <div><span><CalendarDays size={17} /></span><div><h2>Project overview</h2><p>FerixBuilder customer project</p></div></div>
-            <button onClick={() => navigate("/workspace/project")}>View project details</button>
+            <button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "project-details"} onClick={() => runLifecycleAction("project-details", "Project details are ready to review.", "/workspace/project")}>{loadingAction === "project-details" ? <LoaderCircle className="lifecycle-loading" size={14} /> : "View project details"}</button>
           </header>
           <div className="reference-timeline">
             {steps.map(([label, state], index) => (
@@ -298,8 +397,8 @@ function DashboardOverview({ navigate, accountName }: { navigate: (path: string)
         <aside className="reference-status-panel">
           <header><span><FolderKanban size={17} /></span><h2>Project status</h2></header>
           <div><p>Current status <b>Scope review</b></p><span>Your project information is being reviewed. Keep your materials current and you will see the next delivery action here.</span></div>
-          <button className="dash-primary" onClick={() => navigate("/workspace/project")}><FolderKanban size={16} /> Review project</button>
-          <button className="reference-outline" onClick={() => navigate("/workspace/review")}><Eye size={16} /> Review preview</button>
+          <button className="dash-primary" disabled={Boolean(loadingAction)} aria-busy={loadingAction === "review-project"} onClick={() => runLifecycleAction("review-project", "Project review is ready in preview mode.", "/workspace/project")}>{loadingAction === "review-project" ? <><LoaderCircle className="lifecycle-loading" size={16} /> Preparing review…</> : <><FolderKanban size={16} /> Review project</>}</button>
+          <button className="reference-outline" disabled={Boolean(loadingAction)} aria-busy={loadingAction === "review-preview"} onClick={() => runLifecycleAction("review-preview", "Private preview is ready to review.", "/workspace/review")}>{loadingAction === "review-preview" ? <><LoaderCircle className="lifecycle-loading" size={16} /> Loading preview…</> : <><Eye size={16} /> Review preview</>}</button>
         </aside>
       </section>
 
@@ -308,13 +407,13 @@ function DashboardOverview({ navigate, accountName }: { navigate: (path: string)
           <header><span><Eye size={17} /></span><div><h2>Website preview</h2><p>Your private preview will appear here.</p></div></header>
           <div className="reference-preview-window">
             <div><span></span><span></span><span></span><b>ferixbuilder preview</b></div>
-            <section><small>PRIVATE CUSTOMER EXPERIENCE</small><h3>Your business,<br /><strong>made clearer.</strong></h3><button onClick={() => navigate("/workspace/review")}>Open review</button></section>
+            <section><small>PRIVATE CUSTOMER EXPERIENCE</small><h3>Your business,<br /><strong>made clearer.</strong></h3><button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "open-preview"} onClick={() => runLifecycleAction("open-preview", "Preview review is ready in preview mode.", "/workspace/review")}>{loadingAction === "open-preview" ? <LoaderCircle className="lifecycle-loading" size={13} /> : "Open review"}</button></section>
           </div>
-          <footer><button onClick={() => navigate("/workspace/review")}>Open preview <Eye size={14} /></button><button onClick={() => navigate("/workspace/review")}>Share preview link <Globe2 size={14} /></button></footer>
+          <footer><button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "open-preview"} onClick={() => runLifecycleAction("open-preview", "Preview review is ready in preview mode.", "/workspace/review")}>{loadingAction === "open-preview" ? <><LoaderCircle className="lifecycle-loading" size={14} /> Loading preview…</> : <>Open preview <Eye size={14} /></>}</button><button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "share-preview"} onClick={() => runLifecycleAction("share-preview", "Private preview sharing is prepared for this preview session.")}>{loadingAction === "share-preview" ? <><LoaderCircle className="lifecycle-loading" size={14} /> Preparing link…</> : <>Share preview link <Globe2 size={14} /></>}</button></footer>
         </article>
 
         <article className="reference-progress-card">
-          <header><span><Sparkles size={17} /></span><div><h2>Project progress</h2><p>Delivery stages and current focus.</p></div><button>This week <ChevronDown size={14} /></button></header>
+          <header><span><Sparkles size={17} /></span><div><h2>Project progress</h2><p>Delivery stages and current focus.</p></div><button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "refresh-progress"} onClick={() => runLifecycleAction("refresh-progress", "Project progress has been refreshed for this preview.")}>{loadingAction === "refresh-progress" ? <><LoaderCircle className="lifecycle-loading" size={14} /> Updating…</> : <>This week <ChevronDown size={14} /></>}</button></header>
           <div className="reference-chart">
             <span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span>
             <svg viewBox="0 0 410 135" aria-label="Project progress line chart">
@@ -330,7 +429,7 @@ function DashboardOverview({ navigate, accountName }: { navigate: (path: string)
         </article>
 
         <aside className="reference-activity-card">
-          <header><span><Bell size={17} /></span><h2>Recent activity</h2><button>View all</button></header>
+          <header><span><Bell size={17} /></span><h2>Recent activity</h2><button disabled={Boolean(loadingAction)} aria-busy={loadingAction === "refresh-activity"} onClick={() => runLifecycleAction("refresh-activity", "Recent project activity is up to date.")}>{loadingAction === "refresh-activity" ? <LoaderCircle className="lifecycle-loading" size={14} /> : "View all"}</button></header>
           {activities.map(([Icon, title, text]) => <div className="activity-entry" key={title}><i><Icon size={14} /></i><p><b>{title}</b><span>{text}</span></p></div>)}
         </aside>
       </section>

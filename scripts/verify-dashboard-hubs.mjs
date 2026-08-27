@@ -45,15 +45,50 @@ try {
     await desktop.locator(".workspace-shell").isVisible();
   }
 
+  const journeyContextChecks = [
+    ["/workspace/project", "Project status"],
+    ["/workspace/review", "Preview version"],
+    ["/workspace/delivery", "Payment status"],
+    ["/workspace/business", "Active module"],
+    ["/workspace/care", "Management status"],
+    ["/workspace/support", "Support route"],
+    ["/workspace/settings", "Workspace profile"],
+  ];
+  for (const [route, contextLabel] of journeyContextChecks) {
+    await desktop.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+    await desktop.locator(".journey-context-grid").getByText(contextLabel, { exact: true }).isVisible();
+  }
+
   await desktop.goto(`${baseUrl}/dashboard`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "Share preview link" }).click();
+  await desktop.getByText("Preparing link…").isVisible();
+  await desktop.getByRole("status").getByText("Private preview sharing is prepared for this preview session.").isVisible();
+  await desktop.getByRole("button", { name: "This week" }).click();
+  await desktop.getByText("Updating…").isVisible();
+  await desktop.getByRole("status").getByText("Project progress has been refreshed for this preview.").isVisible();
   await desktop.getByRole("button", { name: "Open project" }).click();
-  if (!desktop.url().endsWith("/workspace/project")) throw new Error("Dashboard Open project action did not enter Project");
-  await desktop.getByRole("button", { name: "Update project" }).click();
+  await desktop.getByText("Opening project…").isVisible();
+  await desktop.getByRole("status").getByText("Project workspace is ready in preview mode.").isVisible();
+  await desktop.waitForURL("**/workspace/project");
+  await desktop.getByRole("button", { name: "Update project", exact: true }).click();
   await desktop.getByRole("button", { name: "Brief & onboarding" }).evaluate((button) => {
     if (!button.classList.contains("active")) throw new Error("Project action did not select Brief & onboarding");
   });
 
+  await desktop.goto(`${baseUrl}/workspace/project`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "Review quote decision" }).click();
+  await desktop.getByText("Updating your project lifecycle…").isVisible();
+  await desktop.getByRole("status").getByText("Quote decision is ready for your review in preview mode.").isVisible();
+
+  await desktop.goto(`${baseUrl}/workspace/review`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "Share private preview" }).click();
+  await desktop.getByText("Updating your project lifecycle…").isVisible();
+  await desktop.getByRole("status").getByText("Private preview sharing details are ready in preview mode.").isVisible();
+
   await desktop.goto(`${baseUrl}/workspace/delivery`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "View payment route" }).click();
+  await desktop.getByText("Updating your project lifecycle…").isVisible();
+  await desktop.getByRole("status").getByText("The protected payment route is ready to review in preview mode.").isVisible();
   await desktop.getByRole("button", { name: "Release & downloads" }).click();
   await desktop.getByText("Released files will be protected.").isVisible();
 
@@ -82,6 +117,10 @@ try {
     if (mobile.url().includes("/login")) throw new Error(`Phone ${route} redirected to Login`);
     await mobile.locator(".workspace-shell").isVisible();
   }
+  for (const [route, contextLabel] of journeyContextChecks) {
+    await mobile.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+    await mobile.locator(".journey-context-grid").getByText(contextLabel, { exact: true }).isVisible();
+  }
 
   const compactPhone = await browser.newPage({ viewport: { width: 320, height: 740 } });
   for (const route of hubs) {
@@ -96,14 +135,32 @@ try {
   await mobile.getByText("Preview direction approved").isVisible();
 
   await mobile.goto(`${baseUrl}/dashboard`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "Share preview link" }).click();
+  await mobile.getByText("Preparing link…").isVisible();
+  await mobile.getByRole("status").getByText("Private preview sharing is prepared for this preview session.").isVisible();
   await mobile.getByRole("button", { name: "Open project" }).click();
-  if (!mobile.url().endsWith("/workspace/project")) throw new Error("Phone Dashboard Open project action did not enter Project");
-  await mobile.getByRole("button", { name: "Update project" }).click();
+  await mobile.getByText("Opening project…").isVisible();
+  await mobile.getByRole("status").getByText("Project workspace is ready in preview mode.").isVisible();
+  await mobile.waitForURL("**/workspace/project");
+  await mobile.getByRole("button", { name: "Update project", exact: true }).click();
   await mobile.getByRole("button", { name: "Brief & onboarding" }).evaluate((button) => {
     if (!button.classList.contains("active")) throw new Error("Phone Project action did not select Brief & onboarding");
   });
 
+  await mobile.goto(`${baseUrl}/workspace/project`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "Review quote decision" }).click();
+  await mobile.getByText("Updating your project lifecycle…").isVisible();
+  await mobile.getByRole("status").getByText("Quote decision is ready for your review in preview mode.").isVisible();
+
+  await mobile.goto(`${baseUrl}/workspace/review`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "Share private preview" }).click();
+  await mobile.getByText("Updating your project lifecycle…").isVisible();
+  await mobile.getByRole("status").getByText("Private preview sharing details are ready in preview mode.").isVisible();
+
   await mobile.goto(`${baseUrl}/workspace/delivery`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "View payment route" }).click();
+  await mobile.getByText("Updating your project lifecycle…").isVisible();
+  await mobile.getByRole("status").getByText("The protected payment route is ready to review in preview mode.").isVisible();
   await mobile.getByRole("button", { name: "Release & downloads" }).click();
   await mobile.getByText("Released files will be protected.").isVisible();
 
@@ -131,7 +188,7 @@ try {
   await mobile.getByPlaceholder("member@business.com").fill("team@ferixbuilder.test");
   await mobile.getByRole("button", { name: "Add" }).click();
   await mobile.getByText("team@ferixbuilder.test").isVisible();
-  console.log("Dashboard hubs verified: public contact and project-brief form rendering, 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, phone interactions, and 320px overflow safety.");
+  console.log("Dashboard hubs verified: intercepted public-form submission, lifecycle loading and success feedback, 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, phone interactions, and 320px overflow safety.");
 } finally {
   await browser.close();
 }

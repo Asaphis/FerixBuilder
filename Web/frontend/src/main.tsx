@@ -14,4 +14,7 @@ import "./onboarding-flow.css";
 import "./dashboard-hubs.css";
 import "./dashboard-reference.css";
 import "./dashboard-account-manager.css";
+import "./dashboard-lifecycle-feedback.css";
+import "./dashboard-journey-context.css";
+import "./dashboard-cockpits.css";
 createRoot(document.getElementById("root")!).render(<App />);

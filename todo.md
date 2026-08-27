@@ -76,3 +76,9 @@
 - [x] Verify Business tools search, filter, export, and record actions after the balanced module-surface rebuild at desktop and phone widths.
 - [x] Add explicit desktop and phone regression coverage for Business tools search, filter, protected export, record addition, and record opening after the grouped-layout rebuild.
 - [x] Re-run and record the complete Business tools interaction pass at desktop and 390px after adding those assertions.
+- [x] Audit the disconnected top-summary and lower-workflow-card pattern across every customer journey.
+- [x] Rebuild Project, Review, and Delivery as unified page compositions instead of stacked independent dashboard and workflow cards.
+- [x] Rebuild Business, Care, Support, and Settings as unified page compositions with related modules sized and grouped together.
+- [x] Verify all customer pages preserve their workflow actions while showing balanced desktop and mobile card hierarchy.
+- [x] Remove duplicated standalone journey-context and side-summary cards after their project, review, delivery, care, support, settings, and business information is integrated into the primary workflow composition.
+- [x] Verify the Project page no longer separates Project materials from Project scope and quote as unequal mobile card islands.

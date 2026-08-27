@@ -255,11 +255,6 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
               {info.tabs && <nav className="hub-tabs" aria-label={`${info.title} sections`}>
                 {info.tabs.map((tab) => <button key={tab.id} className={selectedTab?.id === tab.id ? "active" : ""} onClick={() => tabSelect(tab)}>{tab.label}</button>)}
               </nav>}
-              <JourneyContext page={page} activeTab={selectedTab?.label} navigate={navigate} />
-              <JourneyCockpit page={page} activeTab={selectedTab?.id} onTabSelect={(tabId) => {
-                const tab = info.tabs?.find((item) => item.id === tabId);
-                if (tab) tabSelect(tab);
-              }} navigate={navigate} />
               <div className={workflowLoading ? "hub-panel lifecycle-panel-busy" : "hub-panel"} id="customer-workflow" onClick={handleWorkflowLifecycleAction} aria-busy={Boolean(workflowLoading)}>
                 {workflowLoading && <div className="lifecycle-panel-feedback" role="status" aria-live="polite"><LoaderCircle className="lifecycle-loading" size={16} /><span>Updating your project lifecycle…</span></div>}
                 <FeatureSurface page={selectedTab?.surface ?? page} notify={notify} navigate={navigate} heroAction={page === "support" ? "support" : page === "settings" ? "settings" : undefined} heroActionVersion={heroActionVersion} />

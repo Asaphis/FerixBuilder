@@ -213,17 +213,19 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
       <button aria-label="Close workspace menu" className={mobileOpen ? "drawer-backdrop open" : "drawer-backdrop"} onClick={() => setMobileOpen(false)} />
       <aside className={mobileOpen ? "dash-sidebar mobile-open" : "dash-sidebar"}>
         <div className="dash-brand"><span><Sparkles size={15} /></span><b>Ferix</b>Builder<button onClick={() => setMobileOpen(false)}><X size={18} /></button></div>
-        <div className="drawer-caption">Your project journeys and available business tools.</div>
-        {dashboardSections.map(([title, items]) => (
-          <div className="dash-nav-group" key={title}>
-            <p>{title}</p>
-            {items.map(([Icon, label, href]) => (
-              <Link key={href} href={href} className={visiblePage === navPage(href) ? "active" : ""} onClick={() => setMobileOpen(false)}>
-                <Icon size={16} /><span>{label}</span>
-              </Link>
-            ))}
-          </div>
-        ))}
+        <div className="dash-sidebar-scroll" aria-label="Customer workspace navigation">
+          <div className="drawer-caption">Your project journeys and available business tools.</div>
+          {dashboardSections.map(([title, items]) => (
+            <div className="dash-nav-group" key={title}>
+              <p>{title}</p>
+              {items.map(([Icon, label, href]) => (
+                <Link key={href} href={href} className={visiblePage === navPage(href) ? "active" : ""} onClick={() => setMobileOpen(false)}>
+                  <Icon size={16} /><span>{label}</span>
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
         <div className="dash-profile">
           <div className="profile-avatar">{accountName.slice(0, 2).toUpperCase()}</div>
           <div><b>{accountName}</b><span>Preview account</span></div>

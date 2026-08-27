@@ -59,6 +59,20 @@ try {
     await desktop.locator(".journey-context-grid").getByText(contextLabel, { exact: true }).isVisible();
   }
 
+  await desktop.goto(`${baseUrl}/workspace/project`, { waitUntil: "networkidle" });
+  const desktopLayout = await desktop.evaluate(() => {
+    const sidebar = document.querySelector(".dash-sidebar-scroll");
+    const workflowCard = document.querySelector(".hub-panel .workflow-card");
+    const summaryBand = document.querySelector(".workflow-summary-band");
+    return {
+      sidebarOverflow: sidebar ? getComputedStyle(sidebar).overflowY : "missing",
+      workflowColumns: workflowCard ? getComputedStyle(workflowCard).gridTemplateColumns : "missing",
+      summaryDisplay: summaryBand ? getComputedStyle(summaryBand).display : "missing",
+    };
+  });
+  if (desktopLayout.sidebarOverflow !== "auto") throw new Error("Desktop sidebar navigation is not independently scrollable");
+  if (desktopLayout.summaryDisplay !== "grid" || desktopLayout.workflowColumns.split(" ").length < 2) throw new Error("Project detailed workflow is not divided into desktop columns");
+
   await desktop.goto(`${baseUrl}/dashboard`, { waitUntil: "networkidle" });
   await desktop.getByRole("button", { name: "Share preview link" }).click();
   await desktop.getByText("Preparing link…").isVisible();
@@ -206,6 +220,12 @@ try {
   await mobile.getByPlaceholder("member@business.com").fill("team@ferixbuilder.test");
   await mobile.getByRole("button", { name: "Add" }).click();
   await mobile.getByText("team@ferixbuilder.test").isVisible();
+
+  await mobile.getByRole("button", { name: "Open workspace menu" }).click();
+  await mobile.locator(".dash-sidebar.mobile-open .dash-sidebar-scroll").isVisible();
+  const drawerOverflow = await mobile.locator(".dash-sidebar-scroll").evaluate((element) => getComputedStyle(element).overflowY);
+  if (drawerOverflow !== "auto") throw new Error("Mobile workspace navigation is not independently scrollable");
+  await mobile.locator(".dash-sidebar.mobile-open").getByText("Settings", { exact: true }).isVisible();
   console.log("Dashboard hubs verified: intercepted public-form submission, lifecycle loading and success feedback, 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, phone interactions, and 320px overflow safety.");
 } finally {
   await browser.close();

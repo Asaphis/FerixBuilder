@@ -19,4 +19,6 @@ import "./dashboard-journey-context.css";
 import "./dashboard-cockpits.css";
 import "./workflow-balance.css";
 import "./workflow-card-alignment.css";
+import "./workflow-columns.css";
+import "./sidebar-scroll.css";
 createRoot(document.getElementById("root")!).render(<App />);

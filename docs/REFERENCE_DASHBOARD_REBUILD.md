@@ -41,3 +41,7 @@ The post-rebuild browser checks now explicitly exercise record addition, search,
 ## Lower workflow-card alignment
 
 The user-approved upper delivery boards and material panels remain unchanged. The alignment pass applies only to the detailed workflow cards below them: Project scope and quote, preview/revision work, payment and release, business records, managed care, support tickets, and settings. Those cards now use the same substantial border, radius, spacing, heading scale, content density, action height, and information-panel proportions as the approved dashboard cards. The change retains every customer workflow and makes the lower detailed sections read as deliberate dashboard modules rather than a smaller secondary layer.
+
+## Divided detailed layouts and navigation scrolling
+
+Long detailed workflow surfaces now use a primary content column and a connected lifecycle, status, or data-context column on desktop. The Project scope and quote section, payment and release, business record workspace, care operations, settings preferences, and delivery checklist therefore present related content side by side rather than as one very long vertical block. At phone size, the same groups stack in a readable order. The customer sidebar now has its own dedicated scroll region; this applies to the desktop navigation and the mobile workspace drawer, while the profile remains anchored separately.

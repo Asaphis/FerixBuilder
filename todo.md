@@ -79,3 +79,8 @@
 - [x] Compare the approved dashboard and Project materials card proportions against every lower workflow card.
 - [x] Apply shared visual scale, spacing, and density rules to align all lower workflow cards with the approved dashboard card system.
 - [x] Verify the aligned lower cards across every customer page on desktop and mobile without changing the approved upper sections or workflows.
+- [x] Divide long lower workflow sections into balanced two-column desktop groups while preserving every existing action.
+- [x] Keep the customer workspace and grouped sidebar independently scrollable on desktop, with clear stacked sections on mobile.
+- [x] Verify the divided workflow layouts and scroll behavior across customer pages at desktop and phone widths.
+- [x] Correct the customer sidebar and mobile workspace drawer so their navigation content itself can scroll independently.
+- [x] Verify sidebar scroll behavior and navigation reachability on desktop and mobile without changing the approved workspace layout.

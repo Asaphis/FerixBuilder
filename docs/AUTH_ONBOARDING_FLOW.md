@@ -42,4 +42,8 @@ At a **390 × 844** viewport, the automated browser check successfully completed
 
 The phone test also asserted the separate Instagram, Facebook, TikTok, X, and YouTube fields in onboarding before completing the project request.
 
+## Preview dashboard access
+
+For the active preview, every public **Log in** entry is intentionally a direct dashboard route. A phone-width browser test at **390 × 844** opened the public navigation, clicked the visible Log in entry, and confirmed arrival at `/dashboard` with the customer dashboard visible. Registration, verification, onboarding, and Start your project remain their own separate routes.
+
 > This is a customer-flow preview using browser-local state. Production credentials, verification, password recovery, tenant authorisation, and persistence remain the responsibility of the existing secure identity and backend layers.

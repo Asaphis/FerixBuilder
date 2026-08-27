@@ -21,3 +21,7 @@
 - [x] Connect project-brief submission to the correct account-aware registration and onboarding handoff.
 - [x] Validate the new brief route and its mobile layout with the customer entry journey.
 - [x] Run and record a phone-width project-brief submission through registration, verification, and onboarding prefill without creating a real contact enquiry.
+- [x] Enable one-click preview Login access directly into the customer dashboard.
+- [x] Preserve the separate Start your project, Create account, verification, and onboarding routes while preview login is enabled.
+- [x] Verify direct dashboard access from Login at desktop and phone widths.
+- [x] Exercise and record the visible phone-width public Login action opening the dashboard directly.

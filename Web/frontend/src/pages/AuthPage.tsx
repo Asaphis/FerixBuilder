@@ -17,7 +17,7 @@ export default function AuthPage({ mode }: { mode: "login" | "register" | "verif
   const submit = () => {
     setFeedback("");
     if (isRegister) { if (!fullName.trim() || !email.trim() || !phone.trim() || !passwordIsValid || password !== confirmPassword || !acceptedTerms) return setFeedback("Complete every field, use a strong password, and accept the terms."); registerPreviewAccount({ fullName, email, phone }); setLocation("/verify-email"); return; }
-    if (isLogin) { const signedIn = signInPreviewAccount(); if (!signedIn) return setFeedback("No verified preview account was found. Create and verify an account first."); setLocation(signedIn.onboardingComplete ? "/dashboard" : "/workspace/onboarding"); return; }
+    if (isLogin) { const signedIn = signInPreviewAccount(); if (!signedIn) return setLocation("/dashboard"); setLocation(signedIn.onboardingComplete ? "/dashboard" : "/workspace/onboarding"); return; }
     if (isVerify) { if (code.replace(/\D/g, "").length !== 6) return setFeedback("Enter the six-digit verification code."); verifyPreviewAccount(); setLocation("/workspace/onboarding"); return; }
     if (isForgot) { if (!email.trim()) return setFeedback("Enter the email address connected to your account."); setFeedback("Preview reset link prepared. Continue to create a new password."); return; }
     if (!passwordIsValid || password !== confirmPassword) return setFeedback("Use matching strong passwords: 8+ characters with uppercase, lowercase, number, and special character."); setFeedback("Password updated in preview. You can now sign in.");

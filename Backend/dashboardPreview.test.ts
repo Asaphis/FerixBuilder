@@ -8,17 +8,16 @@ describe("FerixBuilder preview dashboard", () => {
 
   it("includes workspace, business, and care navigation groups", () => {
     expect(dashboardSections.map(([title]) => title)).toEqual(["WORKSPACE", "BUSINESS", "CARE", "ACCOUNT"]);
-    expect(dashboardTasks).toHaveLength(5);
+    expect(dashboardTasks).toHaveLength(3);
   });
 
-  it("maps every customer-workspace navigation item to a dedicated route", () => {
+  it("maps each distinct customer journey to one non-duplicated top-level route", () => {
     const routes = dashboardSections.flatMap(([, items]) => items.map(([, , href]) => href));
 
     expect(routes).toEqual([
-      "/dashboard", "/workspace/onboarding", "/workspace/project", "/workspace/files", "/workspace/preview", "/workspace/revisions", "/workspace/payments", "/workspace/downloads",
-      "/workspace/customers", "/workspace/products", "/workspace/bookings", "/workspace/domain",
-      "/workspace/technical-care", "/workspace/management", "/workspace/system-health", "/workspace/support", "/workspace/settings",
+      "/dashboard", "/workspace/project", "/workspace/review", "/workspace/delivery",
+      "/workspace/business", "/workspace/care", "/workspace/support", "/workspace/settings",
     ]);
-    expect(new Set(routes).size).toBe(17);
+    expect(new Set(routes).size).toBe(8);
   });
 });

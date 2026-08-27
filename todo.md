@@ -27,3 +27,15 @@
 - [x] Exercise and record the visible phone-width public Login action opening the dashboard directly.
 - [x] Remove the preview access guard from every customer workspace route so dashboard navigation never redirects to Login during review.
 - [x] Verify all desktop sidebar and mobile workspace navigation destinations remain open in preview mode.
+- [x] Inventory the customer dashboard pages, purpose, visible UI, and preview behavior.
+- [x] Identify duplicated or misaligned pages and recommend the correct customer-dashboard consolidation.
+- [x] Rebuild the customer dashboard navigation into focused non-duplicated project, review, delivery, business, care, support, and settings journeys.
+- [x] Preserve every required customer capability within its correct journey using state-aware tabs and contextual actions.
+- [x] Replace repeated generic page shells with distinct workflow interfaces matched to their function.
+- [x] Verify the corrected dashboard journeys and all customer functions on desktop and mobile.
+- [x] Add explicit approval confirmation, numbered support tickets, and captured managed-service requirements to the relevant customer workflow hubs.
+- [x] Add business-member preferences and a protected-preview export action to retain the settings and business-data capabilities from the platform blueprint.
+- [x] Make top-level hub actions open the relevant tab or focus the relevant form instead of becoming no-op same-page buttons.
+- [x] Isolate preview customer, product, and booking records so changing Business tools tabs never shows records from another module.
+- [x] Make the Support and Settings hub primary actions focus or trigger their actual ticket and preference workflows.
+- [x] Run repeatable phone-width interactions for review approval, support ticket creation, business records, management request submission, and settings/member controls.

@@ -11,4 +11,5 @@ import "./workflow.css";
 import "./workflow-fixes.css";
 import "./project-workflow.css";
 import "./onboarding-flow.css";
+import "./dashboard-hubs.css";
 createRoot(document.getElementById("root")!).render(<App />);

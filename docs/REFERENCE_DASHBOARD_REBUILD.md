@@ -37,3 +37,7 @@ The previous desktop-side workflow cards no longer collapse as isolated, undersi
 Business tools now follows the same composition within its own record workspace: an active-module/context row, a distinct directory board for search, filters, exports, and record creation, plus paired export and selected-record context panels. The customer can still add records, filter them, search them, open their detail, and prepare a protected preview export, but those controls now sit in balanced, grouped sections on both desktop and mobile.
 
 The post-rebuild browser checks now explicitly exercise record addition, search, active-only filtering and reset, protected preview export, and record opening at both desktop and 390px phone widths. This confirms that the visual regrouping did not remove the existing business-data interactions.
+
+## Lower workflow-card alignment
+
+The user-approved upper delivery boards and material panels remain unchanged. The alignment pass applies only to the detailed workflow cards below them: Project scope and quote, preview/revision work, payment and release, business records, managed care, support tickets, and settings. Those cards now use the same substantial border, radius, spacing, heading scale, content density, action height, and information-panel proportions as the approved dashboard cards. The change retains every customer workflow and makes the lower detailed sections read as deliberate dashboard modules rather than a smaller secondary layer.

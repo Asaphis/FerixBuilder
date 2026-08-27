@@ -76,3 +76,6 @@
 - [x] Verify Business tools search, filter, export, and record actions after the balanced module-surface rebuild at desktop and phone widths.
 - [x] Add explicit desktop and phone regression coverage for Business tools search, filter, protected export, record addition, and record opening after the grouped-layout rebuild.
 - [x] Re-run and record the complete Business tools interaction pass at desktop and 390px after adding those assertions.
+- [x] Compare the approved dashboard and Project materials card proportions against every lower workflow card.
+- [x] Apply shared visual scale, spacing, and density rules to align all lower workflow cards with the approved dashboard card system.
+- [x] Verify the aligned lower cards across every customer page on desktop and mobile without changing the approved upper sections or workflows.

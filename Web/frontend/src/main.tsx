@@ -17,4 +17,5 @@ import "./dashboard-account-manager.css";
 import "./dashboard-lifecycle-feedback.css";
 import "./dashboard-journey-context.css";
 import "./dashboard-cockpits.css";
+import "./workflow-balance.css";
 createRoot(document.getElementById("root")!).render(<App />);

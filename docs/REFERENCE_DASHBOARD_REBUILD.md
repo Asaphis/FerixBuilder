@@ -29,3 +29,11 @@ Every customer journey now begins with the same dashboard-oriented hierarchy: a 
 ## Page-specific cockpit panels
 
 The customer pages now carry the dashboard structure through their core content rather than using a shared status row alone. Project has a delivery board with lifecycle checkpoints and materials summary; Review has a private-preview stage and revision checkpoint; Delivery has visible review-to-release gates and a safeguard panel. Business tools, Care, Support, and Settings each have a dedicated operational board plus supporting status information. These panels use their own tabs and linked actions to open the underlying real workflow surfaces, so the composed layout adds clear context without removing the existing customer flows.
+
+## Balanced mobile workflow sections
+
+The previous desktop-side workflow cards no longer collapse as isolated, undersized panels under a large mobile card. Milestone history, delivery control, management status, support route, and workspace preferences were regrouped into substantial in-card summary bands alongside their related actions. Project, Review, Delivery, Care, Support, and Settings therefore retain a deliberate card hierarchy on phone screens: primary action content, then a full-width group of related status details. All original actions and local preview states remain available.
+
+Business tools now follows the same composition within its own record workspace: an active-module/context row, a distinct directory board for search, filters, exports, and record creation, plus paired export and selected-record context panels. The customer can still add records, filter them, search them, open their detail, and prepare a protected preview export, but those controls now sit in balanced, grouped sections on both desktop and mobile.
+
+The post-rebuild browser checks now explicitly exercise record addition, search, active-only filtering and reset, protected preview export, and record opening at both desktop and 390px phone widths. This confirms that the visual regrouping did not remove the existing business-data interactions.

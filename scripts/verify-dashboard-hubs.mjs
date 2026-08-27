@@ -101,6 +101,15 @@ try {
   await desktop.goto(`${baseUrl}/workspace/business`, { waitUntil: "networkidle" });
   await desktop.getByRole("button", { name: "Add customer" }).click();
   await desktop.locator(".record-list").getByText("New customer 1", { exact: true }).first().isVisible();
+  await desktop.getByPlaceholder("Search customers").fill("New customer 1");
+  await desktop.locator(".record-list").getByText("New customer 1", { exact: true }).first().isVisible();
+  await desktop.getByRole("button", { name: "Active only" }).click();
+  await desktop.getByText("No customer records match this view.").isVisible();
+  await desktop.getByRole("button", { name: "Show all" }).click();
+  await desktop.getByRole("button", { name: "Export view" }).click();
+  await desktop.getByText("Protected export prepared in preview").isVisible();
+  await desktop.locator(".record-list").getByRole("button", { name: "Open" }).click();
+  await desktop.getByText("New customer 1", { exact: true }).last().isVisible();
   await desktop.getByRole("button", { name: "Products & services" }).click();
   await desktop.getByText("No product records yet").isVisible();
   await desktop.getByRole("button", { name: "Add product" }).click();
@@ -167,6 +176,15 @@ try {
   await mobile.goto(`${baseUrl}/workspace/business`, { waitUntil: "networkidle" });
   await mobile.getByRole("button", { name: "Add customer" }).click();
   await mobile.locator(".record-list").getByText("New customer 1", { exact: true }).first().isVisible();
+  await mobile.getByPlaceholder("Search customers").fill("New customer 1");
+  await mobile.locator(".record-list").getByText("New customer 1", { exact: true }).first().isVisible();
+  await mobile.getByRole("button", { name: "Active only" }).click();
+  await mobile.getByText("No customer records match this view.").isVisible();
+  await mobile.getByRole("button", { name: "Show all" }).click();
+  await mobile.getByRole("button", { name: "Export view" }).click();
+  await mobile.getByText("Protected export prepared in preview").isVisible();
+  await mobile.locator(".record-list").getByRole("button", { name: "Open" }).click();
+  await mobile.getByText("New customer 1", { exact: true }).last().isVisible();
   await mobile.getByRole("button", { name: "Products & services" }).click();
   await mobile.getByText("No product records yet").isVisible();
 

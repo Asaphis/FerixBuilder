@@ -68,3 +68,11 @@
 - [x] Rebuild the Delivery, Business tools, and Care workflow surfaces with dedicated operational dashboard panels.
 - [x] Rebuild the Support and Settings workflow surfaces with page-specific status, action, and contextual information panels.
 - [x] Verify the deeper page-specific dashboard compositions across desktop and mobile without losing workflow behavior.
+- [x] Audit and remove every small orphaned workflow side panel that becomes visually unbalanced after stacking on mobile.
+- [x] Recompose Project, Review, and Delivery into balanced dashboard sections with related status and action content grouped together.
+- [x] Recompose Business, Care, Support, and Settings into balanced dashboard sections rather than oversized cards followed by tiny panels.
+- [x] Verify every customer route has balanced card hierarchy, desktop columns, and mobile stacking while retaining all workflow actions.
+- [x] Recompose the Business tools module surface into grouped operational sections for module state, records, and protected export context.
+- [x] Verify Business tools search, filter, export, and record actions after the balanced module-surface rebuild at desktop and phone widths.
+- [x] Add explicit desktop and phone regression coverage for Business tools search, filter, protected export, record addition, and record opening after the grouped-layout rebuild.
+- [x] Re-run and record the complete Business tools interaction pass at desktop and 390px after adding those assertions.

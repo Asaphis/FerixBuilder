@@ -1,8 +1,8 @@
 /* Mobile dashboard is information-complete: all desktop navigation stays in a drawer and all cards remain present. */
 .drawer-backdrop,.dash-bottom-nav,.drawer-caption{display:none}
 @media(max-width:780px){
-  .dashboard-shell{padding-bottom:76px}
-  .dash-main{padding-bottom:20px}
+  .dashboard-shell{padding-bottom:96px}
+  .dash-main{padding-bottom:42px}
   .drawer-backdrop{position:fixed;z-index:29;inset:0;border:0;background:#1412297a;opacity:0;pointer-events:none;transition:opacity .2s}
   .drawer-backdrop.open{display:block;opacity:1;pointer-events:auto}
   .dash-sidebar{z-index:30;width:min(84vw,310px);padding:18px 13px 17px;overflow-y:auto}

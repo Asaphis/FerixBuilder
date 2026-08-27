@@ -1,3 +1,7 @@
+import { httpBatchLink } from "@trpc/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import superjson from "superjson";
 import { Route, Switch } from "wouter";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
@@ -6,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import WorkspacePage from "./pages/WorkspacePage";
 import AuthPage from "./pages/AuthPage";
 import StartProject from "./pages/StartProject";
+import { trpc } from "./lib/trpc";
 
 function Router() {
   return <Switch>
@@ -15,4 +20,13 @@ function Router() {
     <Route path="/login">{() => <AuthPage mode="login" />}</Route><Route path="/register">{() => <AuthPage mode="register" />}</Route><Route path="/verify-email">{() => <AuthPage mode="verify" />}</Route><Route path="/forgot-password">{() => <AuthPage mode="forgot" />}</Route><Route path="/reset-password">{() => <AuthPage mode="reset" />}</Route><Route component={Home} />
   </Switch>;
 }
-export default function App() { return <Router />; }
+export default function App() {
+  const [queryClient] = useState(() => new QueryClient());
+  const [client] = useState(() => trpc.createClient({
+    links: [httpBatchLink({ url: "/api/trpc", transformer: superjson })],
+  }));
+
+  return <trpc.Provider client={client} queryClient={queryClient}>
+    <QueryClientProvider client={queryClient}><Router /></QueryClientProvider>
+  </trpc.Provider>;
+}

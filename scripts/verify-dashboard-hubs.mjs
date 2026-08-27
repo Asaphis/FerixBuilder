@@ -7,11 +7,55 @@ const legacyRoutes = ["/workspace/onboarding", "/workspace/files", "/workspace/p
 const browser = await chromium.launch({ executablePath: "/usr/bin/chromium", headless: true });
 try {
   const desktop = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  await desktop.route("**/api/trpc/contact.submit?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify([{ result: { data: { json: { id: 1, accepted: true } } } }]),
+    });
+  });
+  await desktop.goto(`${baseUrl}/contact`, { waitUntil: "networkidle" });
+  await desktop.getByRole("heading", { name: "LET’S BUILD SOMETHING USEFUL." }).isVisible();
+  await desktop.getByLabel("Name").fill("Preview Test");
+  await desktop.getByLabel("Business", { exact: true }).fill("FerixBuilder Preview");
+  await desktop.getByLabel("Email").fill("preview@ferixbuilder.test");
+  await desktop.getByLabel("What do you need?").selectOption("business_website");
+  await desktop.getByLabel("Project context").fill("This browser submission is intercepted and never stored.");
+  await desktop.getByRole("button", { name: "Send project brief" }).click();
+  await desktop.getByText("YOUR BRIEF IS IN.").isVisible();
+  const projectBrief = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  await projectBrief.route("**/api/trpc/contact.submit?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify([{ result: { data: { json: { id: 2, accepted: true } } } }]),
+    });
+  });
+  await projectBrief.goto(`${baseUrl}/start-project`, { waitUntil: "networkidle" });
+  await projectBrief.getByText("A focused, five-field first step").isVisible();
+  await projectBrief.getByLabel("Name").fill("Preview Test");
+  await projectBrief.getByLabel("Business", { exact: true }).fill("FerixBuilder Preview");
+  await projectBrief.getByLabel("Email").fill("preview@ferixbuilder.test");
+  await projectBrief.getByLabel("What do you need?").selectOption("business_website");
+  await projectBrief.getByLabel("Project context").fill("This browser submission is intercepted and never stored.");
+  await projectBrief.getByRole("button", { name: "Send project brief" }).click();
+  await projectBrief.getByText("Create an account to track your project").isVisible();
+
   for (const route of [...hubs, ...legacyRoutes]) {
     await desktop.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
     if (desktop.url().includes("/login")) throw new Error(`${route} redirected to Login`);
     await desktop.locator(".workspace-shell").isVisible();
   }
+
+  await desktop.goto(`${baseUrl}/dashboard`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "Open project" }).click();
+  if (!desktop.url().endsWith("/workspace/project")) throw new Error("Dashboard Open project action did not enter Project");
+  await desktop.getByRole("button", { name: "Update project" }).click();
+  await desktop.getByRole("button", { name: "Brief & onboarding" }).evaluate((button) => {
+    if (!button.classList.contains("active")) throw new Error("Project action did not select Brief & onboarding");
+  });
+
+  await desktop.goto(`${baseUrl}/workspace/delivery`, { waitUntil: "networkidle" });
+  await desktop.getByRole("button", { name: "Release & downloads" }).click();
+  await desktop.getByText("Released files will be protected.").isVisible();
 
   await desktop.goto(`${baseUrl}/workspace/review`, { waitUntil: "networkidle" });
   await desktop.getByRole("button", { name: "Approve direction" }).click();
@@ -39,10 +83,29 @@ try {
     await mobile.locator(".workspace-shell").isVisible();
   }
 
+  const compactPhone = await browser.newPage({ viewport: { width: 320, height: 740 } });
+  for (const route of hubs) {
+    await compactPhone.goto(`${baseUrl}${route}`, { waitUntil: "networkidle" });
+    const hasHorizontalOverflow = await compactPhone.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+    if (hasHorizontalOverflow) throw new Error(`Compact phone ${route} has horizontal page overflow`);
+  }
+
   await mobile.goto(`${baseUrl}/workspace/review`, { waitUntil: "networkidle" });
   await mobile.getByRole("button", { name: "Approve direction" }).click();
   await mobile.getByRole("button", { name: "Confirm approval" }).click();
   await mobile.getByText("Preview direction approved").isVisible();
+
+  await mobile.goto(`${baseUrl}/dashboard`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "Open project" }).click();
+  if (!mobile.url().endsWith("/workspace/project")) throw new Error("Phone Dashboard Open project action did not enter Project");
+  await mobile.getByRole("button", { name: "Update project" }).click();
+  await mobile.getByRole("button", { name: "Brief & onboarding" }).evaluate((button) => {
+    if (!button.classList.contains("active")) throw new Error("Phone Project action did not select Brief & onboarding");
+  });
+
+  await mobile.goto(`${baseUrl}/workspace/delivery`, { waitUntil: "networkidle" });
+  await mobile.getByRole("button", { name: "Release & downloads" }).click();
+  await mobile.getByText("Released files will be protected.").isVisible();
 
   await mobile.goto(`${baseUrl}/workspace/business`, { waitUntil: "networkidle" });
   await mobile.getByRole("button", { name: "Add customer" }).click();
@@ -68,7 +131,7 @@ try {
   await mobile.getByPlaceholder("member@business.com").fill("team@ferixbuilder.test");
   await mobile.getByRole("button", { name: "Add" }).click();
   await mobile.getByText("team@ferixbuilder.test").isVisible();
-  console.log("Dashboard hubs verified: 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, and phone interactions.");
+  console.log("Dashboard hubs verified: public contact and project-brief form rendering, 8 customer journeys, 13 legacy entry routes, controlled approval, module-isolated records, support tickets, management requests, settings members, desktop, phone interactions, and 320px overflow safety.");
 } finally {
   await browser.close();
 }

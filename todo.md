@@ -39,3 +39,18 @@
 - [x] Isolate preview customer, product, and booking records so changing Business tools tabs never shows records from another module.
 - [x] Make the Support and Settings hub primary actions focus or trigger their actual ticket and preference workflows.
 - [x] Run repeatable phone-width interactions for review approval, support ticket creation, business records, management request submission, and settings/member controls.
+- [x] Audit every customer dashboard journey at phone width for layout overflow, weak hierarchy, cramped controls, and navigation defects.
+- [x] Correct the Project and all other dashboard pages with route-specific mobile spacing, card, tab, form, and action layouts.
+- [x] Re-test every customer dashboard journey and key action at phone width after the responsive correction pass.
+- [x] Replace clipped horizontal mobile hub tabs with complete touch-friendly tab grids and protect page endings from the fixed mobile navigation.
+- [x] Refine the Project and Delivery card/action layouts with explicit compact-phone treatment beyond the shared tab-grid correction.
+- [x] Exercise Dashboard, Project, Delivery, and remaining customer-hub actions at phone width after the responsive changes.
+- [x] Rebuild the customer dashboard shell and overview around the supplied light operational-cockpit visual direction.
+- [x] Add the reference-inspired project status cards, lifecycle overview, preview, progress, activity, support, account manager, and update modules while retaining FerixBuilder workflow controls.
+- [x] Redesign all customer hub pages to share the refined dashboard shell but use page-specific workspace content.
+- [x] Deliver full mobile feature parity with every desktop customer function available through responsive content, bottom navigation, and the full workspace drawer.
+- [x] Verify the rebuilt dashboard across desktop and phone layouts, including all customer workflow interactions.
+- [x] Correct the compact-phone dashboard welcome composition so the customer greeting and primary project action remain vertically balanced and fully readable.
+- [x] Restore the React Query and tRPC providers around the route shell so the public contact and project-brief forms continue to submit correctly.
+- [x] Add a dedicated account-manager contact surface to the dashboard delivery-team area.
+- [x] Verify the restored public contact and project-brief mutations through safe intercepted browser submissions without creating production enquiries.

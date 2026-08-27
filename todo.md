@@ -10,3 +10,9 @@
 - [x] Make customer, product, and booking filters change displayed preview records with route-specific record detail states.
 - [x] Replace the remaining onboarding, settings, and workspace-header notification-only actions with persistent preview outcomes or routed destinations.
 - [x] Revalidate the final in-page preview-state actions on desktop and mobile.
+- [x] Audit and correct the registration, login, verification, onboarding, and dashboard routing flow.
+- [x] Build a lightweight account-aware preview state so new registrations enter onboarding while returning users go to their dashboard.
+- [x] Expand onboarding into the progressive business and project-request journey specified in the supplied requirements.
+- [x] Test new-user and returning-user journeys at desktop and mobile widths.
+- [x] Add distinct optional social-channel fields and explicit brand-colour and brand-guide choices to onboarding.
+- [x] Exercise and record the complete new-user and returning-user journeys interactively at phone width.

@@ -92,3 +92,30 @@
 - [x] Assert the compact-grid routes retain clear space above the mobile bottom navigation and no final workflow controls are obscured.
 - [x] Assert the final interactive control on each compact-grid workflow route remains unobscured above the mobile bottom navigation at 390px and 360px.
 - [x] Complete a final visual pass confirming the last actionable controls are not covered by mobile navigation on every affected page.
+
+- [ ] Audit and stabilize the existing production build entry before starting admin work.
+- [ ] Define the Web/admin information architecture, admin roles, permissions, and customer-data boundaries.
+- [ ] Build the responsive admin shell with grouped sidebar navigation, topbar search/actions, and mobile drawer navigation.
+- [ ] Build the admin overview with project pipeline, customer activity, approvals, payments, support, and health summaries.
+- [ ] Build admin operational surfaces for customers, projects, reviews, delivery, business records, support, care, settings, and audit activity.
+- [ ] Add preview-safe admin interactions with loading, success, empty, and error states without claiming backend persistence.
+- [ ] Verify admin desktop/mobile layouts, role boundaries, customer-data isolation, and production build health.
+- [ ] Document the admin front-end foundation and save a checkpoint before delivery.
+
+## Current admin scope decisions
+
+- Admin work is limited to Web/admin; Web/frontend customer pages remain unchanged.
+- Admin controls must never expose database credentials, infrastructure secrets, SSH access, raw SQL, internal logs, or another customer’s private data.
+- Preview interactions may be local until the backend phase; production mutations must later use protected, tenant-aware tRPC procedures.
+- The production build currently reports a missing client/index.html entry and must be repaired or reconciled with the Web/frontend structure before delivery.
+
+## Admin information architecture draft
+
+- Overview: delivery pipeline, approvals, payments, support queue, care alerts, and platform health.
+- Customers: customer directory, customer profile, project relationship, access state, and activity.
+- Projects: onboarding briefs, scope, files, preview, revisions, milestones, and project status.
+- Review & approvals: preview approvals, revision rounds, decisions, and audit trail.
+- Delivery & payments: quote state, payment state, release readiness, and controlled handoff.
+- Business data: customer/product/booking records with customer isolation.
+- Support & care: numbered tickets, management requests, domain/care status, and service health.
+- Settings & governance: admin members, roles, notifications, workspace settings, and audit activity.

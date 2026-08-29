@@ -119,3 +119,7 @@
 - Business data: customer/product/booking records with customer isolation.
 - Support & care: numbered tickets, management requests, domain/care status, and service health.
 - Settings & governance: admin members, roles, notifications, workspace settings, and audit activity.
+
+- [ ] Inspect the current Git remote, branch, and worktree before pushing the project.
+- [ ] Create a safe commit containing the current FerixBuilder customer dashboard, workflow grids, sidebar scrolling, and admin foundation.
+- [ ] Push the current commit to the connected GitHub repository and verify the remote branch.

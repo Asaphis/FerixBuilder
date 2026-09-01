@@ -4,10 +4,10 @@ export default function RevisionsPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="◎" value="14" label="Open Revisions" />
-        <StatCard iconClass="rank" icon="★" value="42" label="Completed This Month" />
-        <StatCard iconClass="tasks" icon="✓" value="3" label="Awaiting Approval" />
-        <StatCard iconClass="profile" icon="♦" value="2.1" label="Avg Rounds / Project" footnote="Review queue" />
+        <StatCard icon="layers" value="14" label="Open Revisions" />
+        <StatCard icon="star" value="42" label="Completed This Month" />
+        <StatCard icon="check" value="3" label="Awaiting Approval" />
+        <StatCard icon="spark" value="2.1" label="Avg Rounds / Project" footnote="Review queue" />
       </div>
 
       <SectionHeader title="Revision Queue" subtitle="All pending feedback and change requests" accent="Pending" />
@@ -31,7 +31,7 @@ export default function RevisionsPage() {
 
       <section className="widget-grid">
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge network">⊙</span>RV-301 • Acme Redesign</span><Badge variant="danger">High Priority</Badge></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge network">@</span>RV-301 • Acme Redesign</span><Badge variant="danger">High Priority</Badge></div>
           <div className="feed-card">
             <img src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=annotated%20website%20wireframe%20with%20design%20feedback%20notes%20and%20arrows&image_size=portrait_4_3" alt="Revision mockup" />
             <div className="feed-copy">
@@ -47,7 +47,7 @@ export default function RevisionsPage() {
         </article>
 
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge inventory">◫</span>RV-300 • Zenith Store</span><Badge variant="warning">Medium</Badge></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge inventory">#</span>RV-300 • Zenith Store</span><Badge variant="warning">Medium</Badge></div>
           <div className="stat-row">
             <div className="stat-row-item"><small>Copy Updates</small><strong>18 items</strong></div>
             <div className="stat-row-item"><small>New Assets</small><strong>4 images</strong></div>

@@ -4,10 +4,10 @@ export default function ProjectsPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="◎" value="15" label="Active Projects" />
-        <StatCard iconClass="tasks" icon="✓" value="36" label="Delivered (YTD)" />
-        <StatCard iconClass="rank" icon="★" value="142" label="Total Completed" />
-        <StatCard iconClass="profile" icon="♦" value="5" label="New Requests" footnote="Review pipeline" />
+        <StatCard icon="layers" value="15" label="Active Projects" />
+        <StatCard icon="check" value="36" label="Delivered (YTD)" />
+        <StatCard icon="star" value="142" label="Total Completed" />
+        <StatCard icon="spark" value="5" label="New Requests" footnote="Review pipeline" />
       </div>
 
       <SectionHeader title="Active Pipeline" subtitle="All projects currently in delivery" accent="Board" />

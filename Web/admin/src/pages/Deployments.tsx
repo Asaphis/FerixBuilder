@@ -4,17 +4,17 @@ export default function DeploymentsPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="⊙" value="82" label="Live Sites" />
-        <StatCard iconClass="tasks" icon="✓" value="85" label="Builds Today" />
-        <StatCard iconClass="rank" icon="★" value="99.9%" label="Uptime SLA" />
-        <StatCard iconClass="profile" icon="♦" value="3" label="Failed Builds" footnote="View logs" />
+        <StatCard icon="globe" value="82" label="Live Sites" />
+        <StatCard icon="check" value="85" label="Builds Today" />
+        <StatCard icon="chart" value="99.9%" label="Uptime SLA" />
+        <StatCard icon="spark" value="3" label="Failed Builds" footnote="View logs" />
       </div>
 
       <SectionHeader title="Deployment Regions" subtitle="Global edge network coverage and capacity" accent="Infrastructure" />
 
       <section className="widget-grid">
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge network">⊙</span>EU-WEST-1 (Ireland)</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge network">@</span>EU-WEST-1 (Ireland)</span></div>
           <div className="chart-mini">
             <svg viewBox="0 0 320 120" preserveAspectRatio="none">
               <defs><linearGradient id="euFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#ff8fa7" stopOpacity="0.35"/><stop offset="1" stopColor="#ff8fa7" stopOpacity="0"/></linearGradient></defs>
@@ -28,7 +28,7 @@ export default function DeploymentsPage() {
         </article>
 
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge finance">▤</span>US-EAST-1 (Virginia)</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge finance">$</span>US-EAST-1 (Virginia)</span></div>
           <div className="chart-mini">
             <svg viewBox="0 0 320 120" preserveAspectRatio="none">
               <defs><linearGradient id="usFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#7bb2ff" stopOpacity="0.35"/><stop offset="1" stopColor="#7bb2ff" stopOpacity="0"/></linearGradient></defs>
@@ -42,7 +42,7 @@ export default function DeploymentsPage() {
         </article>
 
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge social">☘</span>APAC-1 (Singapore)</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge social">+</span>APAC-1 (Singapore)</span></div>
           <div className="chart-mini">
             <svg viewBox="0 0 320 120" preserveAspectRatio="none">
               <defs><linearGradient id="apFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#9be7c9" stopOpacity="0.35"/><stop offset="1" stopColor="#9be7c9" stopOpacity="0"/></linearGradient></defs>
@@ -56,7 +56,7 @@ export default function DeploymentsPage() {
         </article>
 
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge inventory">◫</span>Build Queue</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge inventory">#</span>Build Queue</span></div>
           <div style={{ padding: "18px", borderRadius: 6, background: "linear-gradient(145deg, #ffe9cf 0%, #ffcf98 100%)", textAlign: "center" }}>
             <strong style={{ fontSize: 40, color: "#5b3803", letterSpacing: "-0.04em" }}>7</strong>
             <div style={{ color: "#8c5614", fontSize: 12, fontWeight: 700, marginTop: 4 }}>Pending Builds</div>

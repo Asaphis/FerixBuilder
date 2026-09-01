@@ -4,10 +4,10 @@ export default function CommsPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="✉" value="32" label="Unread Messages" />
-        <StatCard iconClass="tasks" icon="✓" value="8" label="Pending Approvals" />
-        <StatCard iconClass="rank" icon="★" value="14" label="Open Revisions" />
-        <StatCard iconClass="profile" icon="♦" value="5" label="Support Tickets" footnote="Respond now" />
+        <StatCard icon="mail" value="32" label="Unread Messages" />
+        <StatCard icon="check" value="8" label="Pending Approvals" />
+        <StatCard icon="layers" value="14" label="Open Revisions" />
+        <StatCard icon="ticket" value="5" label="Support Tickets" footnote="Respond now" />
       </div>
 
       <SectionHeader title="Recent Conversations" subtitle="Latest client communications" accent="Inbox" />
@@ -17,7 +17,7 @@ export default function CommsPage() {
           <div style={{ display: "grid", gap: 4 }}>
             {[
               { name: "Acme Corp", subj: "Revisions needed on the checkout page", time: "2m ago", unread: true, avatar: "AC", gradient: "linear-gradient(145deg, #7fb3ff 0%, #497dff 100%)" },
-              { name: "Zenith Labs", subj: "Love the new design! Ready for launch 🚀", time: "14m ago", unread: true, avatar: "ZL", gradient: "linear-gradient(145deg, #82e1c2 0%, #35b78d 100%)" },
+              { name: "Zenith Labs", subj: "Love the new design! Ready for launch", time: "14m ago", unread: true, avatar: "ZL", gradient: "linear-gradient(145deg, #82e1c2 0%, #35b78d 100%)" },
               { name: "Blue Harbor", subj: "Can we schedule a call about API integration?", time: "1h ago", unread: false, avatar: "BH", gradient: "linear-gradient(145deg, #ffd8a1 0%, #ff9a6c 100%)" },
               { name: "Northwind Co", subj: "Invoice #1041 has been paid", time: "3h ago", unread: false, avatar: "NW", gradient: "linear-gradient(145deg, #a366ff 0%, #6949ff 100%)" },
               { name: "Stellar Industries", subj: "Domain DNS propagation confirmed", time: "Yesterday", unread: false, avatar: "SI", gradient: "linear-gradient(145deg, #ff9ab0 0%, #ef5b7d 100%)" },
@@ -56,7 +56,7 @@ export default function CommsPage() {
           </div>
         </article>
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge social">☘</span>Approval Requests</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge social">+</span>Approval Requests</span></div>
           <div className="list-line"><div><strong>Zenith Labs — Final Design</strong><small>Awaiting client sign-off</small></div><Badge variant="warning">Pending</Badge></div>
           <div className="list-line"><div><strong>Northwind — API Spec</strong><small>Approved by stakeholder</small></div><Badge variant="success">Approved</Badge></div>
           <div className="list-line"><div><strong>Blue Harbor — Copy Review</strong><small>2 changes requested</small></div><Badge variant="danger">Rejected</Badge></div>

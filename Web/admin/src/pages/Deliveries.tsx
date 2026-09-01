@@ -2,7 +2,7 @@ import { SimpleContentPage, DataTable, Badge } from "../components/UIComponents"
 
 export default function DeliveriesPage() {
   return (
-    <SimpleContentPage title="Deliveries Pipeline" iconClass="rank" icon="🚚">
+    <SimpleContentPage title="Deliveries Pipeline" icon="truck">
       <DataTable
         headers={["Project", "Client", "Scheduled", "Assignee", "Milestone", "Status"]}
         rows={[

@@ -4,10 +4,10 @@ export default function StoragePage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="▤" value="48.2 GB" label="Storage Used" />
-        <StatCard iconClass="tasks" icon="✓" value="1,284" label="Total Files" />
-        <StatCard iconClass="rank" icon="★" value="82%" label="CDN Cache Hit" />
-        <StatCard iconClass="profile" icon="♦" value="250 GB" label="Plan Limit" footnote="Upgrade plan" />
+        <StatCard icon="folder" value="48.2 GB" label="Storage Used" />
+        <StatCard icon="check" value="1,284" label="Total Files" />
+        <StatCard icon="chart" value="82%" label="CDN Cache Hit" />
+        <StatCard icon="spark" value="250 GB" label="Plan Limit" footnote="Upgrade plan" />
       </div>
       <SectionHeader title="Media Library" subtitle="All uploaded assets and site files" accent="Gallery" />
       <section className="widget-grid">

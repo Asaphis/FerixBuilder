@@ -2,7 +2,7 @@ import { SimpleContentPage, Badge } from "../components/UIComponents";
 
 export default function ProfilePage() {
   return (
-    <SimpleContentPage title="Admin Profile" iconClass="profile" icon="👤">
+    <SimpleContentPage title="Admin Profile" icon="user">
       <div style={{ display: "grid", gap: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
           <div style={{ width: 88, height: 88, borderRadius: 8, background: "linear-gradient(145deg, #ffd8a1 0%, #ff9a6c 100%)", display: "grid", placeItems: "center", color: "white", fontWeight: 800, fontSize: 30, letterSpacing: "-0.04em", boxShadow: "0 14px 30px rgba(255,154,108,0.3)" }}>FA</div>

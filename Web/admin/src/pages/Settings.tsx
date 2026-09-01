@@ -2,7 +2,7 @@ import { SimpleContentPage } from "../components/UIComponents";
 
 export default function SettingsPage() {
   return (
-    <SimpleContentPage title="Platform Settings" iconClass="profile" icon="⚙">
+    <SimpleContentPage title="Platform Settings" icon="settings">
       <div style={{ display: "grid", gap: 28 }}>
         <div>
           <h3 style={{ margin: "0 0 14px", fontSize: 15, letterSpacing: "-0.01em" }}>Workspace Preferences</h3>

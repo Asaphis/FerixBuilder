@@ -4,10 +4,10 @@ export default function TemplatesPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="▤" value="48" label="Total Templates" />
-        <StatCard iconClass="tasks" icon="✓" value="12" label="Used This Month" />
-        <StatCard iconClass="rank" icon="★" value="4.8" label="Avg Rating" />
-        <StatCard iconClass="profile" icon="♦" value="6" label="New This Q" footnote="Browse all" />
+        <StatCard icon="boxes" value="48" label="Total Templates" />
+        <StatCard icon="check" value="12" label="Used This Month" />
+        <StatCard icon="star" value="4.8" label="Avg Rating" />
+        <StatCard icon="spark" value="6" label="New This Q" footnote="Browse all" />
       </div>
       <SectionHeader title="Template Gallery" subtitle="Starter kits for rapid project scaffolding" accent="Library" />
       <section className="widget-grid">
@@ -22,7 +22,7 @@ export default function TemplatesPage() {
           <article className="widget-card" key={i}>
             <img src={tpl.img} alt={tpl.n} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 6 }} />
             <div className="widget-card-head"><span className="widget-label"><strong style={{ fontSize: 14 }}>{tpl.n}</strong></span><Badge variant="info">{tpl.t}</Badge></div>
-            <div className="list-line"><div><strong>Rating</strong><small>Community score</small></div><strong>★ {tpl.r}</strong></div>
+            <div className="list-line"><div><strong>Rating</strong><small>Community score</small></div><strong>{tpl.r}</strong></div>
             <div style={{ display: "flex", gap: 8 }}>
               <button className="login-btn" style={{ padding: "10px 14px", flex: 1, fontSize: 12, margin: 0 }}>Use Template</button>
               <button className="widget-more" style={{ border: "1px solid var(--line)", background: "white", width: "auto", padding: "0 14px", color: "var(--text-muted)" }}>Preview</button>

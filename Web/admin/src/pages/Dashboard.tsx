@@ -11,12 +11,12 @@ export default function DashboardPage() {
               <span className="partner-avatar jw">AC</span>
               <div className="partner-chip">
                 <strong>Acme Corp</strong>
-                <span>🚀</span>
+                <span>Active</span>
               </div>
               <span className="partner-avatar mt">ZL</span>
               <div className="partner-chip">
                 <strong>Zenith Labs</strong>
-                <span>🚀</span>
+                <span>Active</span>
               </div>
             </div>
             <span className="welcome-note">Your top 2 clients with pending website deliveries today.</span>
@@ -32,14 +32,14 @@ export default function DashboardPage() {
 
         <aside className="tip-card">
           <div className="tip-card-head">
-            <span className="tip-title"><span>💡</span> Quick Action</span>
+            <span className="tip-title">Quick Action</span>
             <div className="tip-actions">
-              <button type="button" className="tip-tab-btn primary">▷ View</button>
+              <button type="button" className="tip-tab-btn primary">View</button>
               <button type="button" className="tip-tab-btn">⋮</button>
             </div>
           </div>
           <div className="tip-content">
-            <div className="tip-content-icon">⌕</div>
+            <div className="tip-content-icon">New</div>
             <strong>New Project Request</strong>
             <p>Review the latest requirements submitted by Acme Corp for their new custom website build.</p>
           </div>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
       <section className="widget-grid">
         <article className="widget-card">
           <div className="widget-card-head">
-            <span className="widget-label"><span className="widget-badge finance">▤</span>Platform Revenue</span>
+            <span className="widget-label"><span className="widget-badge finance">$</span>Platform Revenue</span>
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="credit-card">
@@ -79,7 +79,7 @@ export default function DashboardPage() {
 
         <article className="widget-card">
           <div className="widget-card-head">
-            <span className="widget-label"><span className="widget-badge inventory">◫</span>Project Delivery</span>
+            <span className="widget-label"><span className="widget-badge inventory">#</span>Project Delivery</span>
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="two-col-row">
@@ -108,7 +108,7 @@ export default function DashboardPage() {
 
         <article className="widget-card">
           <div className="widget-card-head">
-            <span className="widget-label"><span className="widget-badge network">⊙</span>System Deployments</span>
+            <span className="widget-label"><span className="widget-badge network">@</span>System Deployments</span>
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="chart-mini">
@@ -139,7 +139,7 @@ export default function DashboardPage() {
 
         <article className="widget-card">
           <div className="widget-card-head">
-            <span className="widget-label"><span className="widget-badge social">☘</span>Client Requests</span>
+            <span className="widget-label"><span className="widget-badge social">+</span>Client Requests</span>
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="feed-card">
@@ -155,11 +155,11 @@ export default function DashboardPage() {
           </div>
           <div className="feed-tile">
             <div className="feed-tile-item social">
-              <div className="feed-tile-icon">♪</div>
+              <div className="feed-tile-icon">Ticket</div>
               <div className="feed-tile-copy"><strong>New Ticket</strong><small>Domain connection assistance needed...</small></div>
             </div>
             <div className="feed-tile-item bookmark">
-              <div className="feed-tile-icon">♡</div>
+              <div className="feed-tile-icon">Done</div>
               <div className="feed-tile-copy"><strong>Approved</strong><small>Client accepted final delivery</small></div>
             </div>
           </div>

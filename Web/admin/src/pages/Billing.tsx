@@ -4,10 +4,10 @@ export default function BillingPage() {
   return (
     <>
       <div className="stat-strip">
-        <StatCard iconClass="level3" icon="$" value="$12,450" label="Monthly Recurring" />
-        <StatCard iconClass="rank" icon="★" value="$45,250" label="Total Invoiced" />
-        <StatCard iconClass="tasks" icon="✓" value="$32,100" label="Collected" />
-        <StatCard iconClass="profile" icon="♦" value="$3,200" label="Pending Payouts" footnote="Review invoices" />
+        <StatCard icon="diamond" value="$12,450" label="Monthly Recurring" />
+        <StatCard icon="star" value="$45,250" label="Total Invoiced" />
+        <StatCard icon="check" value="$32,100" label="Collected" />
+        <StatCard icon="spark" value="$3,200" label="Pending Payouts" footnote="Review invoices" />
       </div>
 
       <SectionHeader title="Recent Invoices" subtitle="Latest billing activity across all clients" accent="Ledger" />
@@ -43,7 +43,7 @@ export default function BillingPage() {
         </article>
 
         <article className="widget-card">
-          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge finance">▤</span>Stripe Connect</span></div>
+          <div className="widget-card-head"><span className="widget-label"><span className="widget-badge finance">$</span>Stripe Connect</span></div>
           <div className="stat-row">
             <div className="stat-row-item"><small>Platform Fees</small><strong>2.9% + $0.30</strong><span>Standard</span></div>
             <div className="stat-row-item"><small>Payout Schedule</small><strong>Weekly</strong><span>Every Monday</span></div>

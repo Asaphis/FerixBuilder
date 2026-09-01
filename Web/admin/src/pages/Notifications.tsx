@@ -2,7 +2,7 @@ import { SimpleContentPage, Badge } from "../components/UIComponents";
 
 export default function NotificationsPage() {
   return (
-    <SimpleContentPage title="Notifications Center" iconClass="level3" icon="🔔">
+    <SimpleContentPage title="Notifications Center" icon="bell">
       <div style={{ display: "grid", gap: 4 }}>
         {[
           { t: "Build #4857 deployed successfully", m: "Acme Corp — Redesign v3 is now live", time: "2 min ago", dot: true, variant: "success" as const },

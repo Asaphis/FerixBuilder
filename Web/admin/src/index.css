@@ -535,9 +535,9 @@ input::placeholder {
 .admin-page-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 12px;
-  padding: 2px 2px 0;
+  padding: 4px 2px 0;
   flex-wrap: wrap;
   width: 100%;
 }
@@ -545,39 +545,45 @@ input::placeholder {
 .admin-page-head-left {
   min-width: 0;
   flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.admin-page-head-left h1 {
+.admin-head-kicker {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-page-title {
   margin: 0;
-  font-size: 14px;
-  letter-spacing: -0.01em;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1.1;
-}
-
-.admin-page-head-left h1 strong {
-  font-size: 26px;
-  display: block;
-  letter-spacing: -0.04em;
   background: linear-gradient(105deg, #5aa6ff 0%, #6373ff 45%, #a165ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin: 2px 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
-.admin-page-head-left p {
+.admin-page-sub {
   margin: 0;
   color: var(--text-soft);
   font-size: 11px;
   line-height: 1.3;
-}
-
-.admin-head-kicker {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .admin-page-head-right {
@@ -814,26 +820,33 @@ input::placeholder {
   display: grid;
   place-items: center;
   color: white;
-  font-weight: 800;
-  font-size: 16px;
   flex-shrink: 0;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
 }
 
-.stat-icon.level3 {
+.stat-icon.violet {
   background: linear-gradient(145deg, #a366ff 0%, #6949ff 100%);
 }
 
-.stat-icon.rank {
+.stat-icon.orange {
   background: linear-gradient(145deg, #ff9d5c 0%, #ff6f3a 100%);
 }
 
-.stat-icon.tasks {
+.stat-icon.green {
   background: linear-gradient(145deg, #61d9a9 0%, #1fb27e 100%);
 }
 
-.stat-icon.profile {
+.stat-icon.blue {
   background: linear-gradient(145deg, #75a8ff 0%, #3f77ff 100%);
+}
+
+.footnote-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--primary-2);
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .stat-body {
@@ -1479,23 +1492,18 @@ input::placeholder {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
     padding: 0;
   }
 
   .admin-page-head-left {
     width: 100%;
     flex: 1 1 auto;
+    gap: 1px;
   }
 
-  .admin-page-head-left h1 {
-    font-size: 13px;
-    line-height: 1;
-  }
-
-  .admin-page-head-left h1 strong {
-    font-size: 22px;
-    margin: 1px 0 1px;
+  .admin-page-title {
+    font-size: 20px;
   }
 
   .admin-page-head-right {
@@ -1634,12 +1642,8 @@ input::placeholder {
     font-size: 18px;
   }
 
-  .admin-page-head-left h1 {
-    font-size: 12px;
-  }
-
-  .admin-page-head-left h1 strong {
-    font-size: 20px;
+  .admin-page-title {
+    font-size: 18px;
   }
 
   .credit-card {
@@ -1685,8 +1689,11 @@ input::placeholder {
     width: 34px;
     height: 34px;
   }
-  .admin-page-head-left h1 strong {
-    font-size: 18px;
+  .admin-page-title {
+    font-size: 17px;
+  }
+  .admin-page-sub {
+    font-size: 10px;
   }
   .head-date-chip {
     padding: 7px 10px;

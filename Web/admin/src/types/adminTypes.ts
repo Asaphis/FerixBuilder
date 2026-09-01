@@ -1,3 +1,5 @@
+import type { IconName } from "../components/UIComponents";
+
 export type PageKey =
   | "dashboard"
   | "billing"
@@ -20,71 +22,73 @@ export type PageKey =
 export type NavItem = {
   label: string;
   page: PageKey;
+  icon: IconName;
   badge?: string;
   dot?: "active" | "default";
 };
 
 export type NavSection = {
   title: string;
-  icon?: string;
+  icon: IconName;
   items: NavItem[];
 };
 
 export const mainSections: NavSection[] = [
   {
     title: "Platform Management",
-    icon: "◐",
+    icon: "layout",
     items: [
-      { label: "Dashboard", page: "dashboard" },
-      { label: "Billing & Payments", page: "billing" },
-      { label: "Deployments", page: "deployments" },
-      { label: "Customer Comms", page: "comms" },
-      { label: "Active Projects", page: "projects" },
-      { label: "Revisions", page: "revisions", dot: "active" },
-      { label: "Admin Guides", page: "guides" },
-      { label: "Settings", page: "settings", badge: "♥" },
+      { label: "Dashboard", page: "dashboard", icon: "home" },
+      { label: "Billing & Payments", page: "billing", icon: "chart" },
+      { label: "Deployments", page: "deployments", icon: "globe" },
+      { label: "Customer Comms", page: "comms", icon: "mail" },
+      { label: "Active Projects", page: "projects", icon: "layers" },
+      { label: "Revisions", page: "revisions", icon: "activity", dot: "active" },
+      { label: "Admin Guides", page: "guides", icon: "book" },
+      { label: "Settings", page: "settings", icon: "settings", badge: "3" },
     ],
   },
   {
     title: "Tools",
-    icon: "◉",
+    icon: "boxes",
     items: [
-      { label: "Notifications", page: "notifications" },
-      { label: "File Storage", page: "storage", dot: "active" },
-      { label: "Deliveries", page: "deliveries", dot: "default" },
+      { label: "Notifications", page: "notifications", icon: "bell" },
+      { label: "File Storage", page: "storage", icon: "folderOpen", dot: "active" },
+      { label: "Deliveries", page: "deliveries", icon: "truck", dot: "default" },
     ],
   },
   {
     title: "Operations",
+    icon: "flag",
     items: [
-      { label: "Admin Profile", page: "profile" },
-      { label: "Client Directory", page: "clients" },
-      { label: "Support Tickets", page: "tickets" },
-      { label: "Audit Logs", page: "audit" },
-      { label: "API Docs", page: "api" },
-      { label: "Template Library", page: "templates" },
+      { label: "Admin Profile", page: "profile", icon: "user" },
+      { label: "Client Directory", page: "clients", icon: "users" },
+      { label: "Support Tickets", page: "tickets", icon: "ticket" },
+      { label: "Audit Logs", page: "audit", icon: "shield" },
+      { label: "API Docs", page: "api", icon: "code" },
+      { label: "Template Library", page: "templates", icon: "folder" },
     ],
   },
 ];
 
 export const pageTitles: Record<PageKey, { kicker: string; title: string; subtitle: string }> = {
-  dashboard: { kicker: "Operations Hub", title: "Welcome, FerixAdmin", subtitle: "This is your central operations hub" },
-  billing: { kicker: "Financials", title: "Billing & Payments", subtitle: "Track invoices, payouts, and recurring revenue" },
-  deployments: { kicker: "Infrastructure", title: "System Deployments", subtitle: "Monitor build servers, deploy status, and uptime" },
-  comms: { kicker: "Communications", title: "Customer Comms", subtitle: "Manage client conversations, tickets, and approvals" },
-  projects: { kicker: "Portfolio", title: "Active Projects", subtitle: "All active website builds in the delivery pipeline" },
-  revisions: { kicker: "Iterations", title: "Revisions Queue", subtitle: "Pending changes, feedback, and approval rounds" },
-  guides: { kicker: "Knowledge Base", title: "Admin Guides", subtitle: "Documentation for platform operations" },
-  settings: { kicker: "Configuration", title: "Platform Settings", subtitle: "Customize your admin workspace preferences" },
-  notifications: { kicker: "Alerts", title: "Notifications Center", subtitle: "All platform alerts and updates in one place" },
-  storage: { kicker: "Assets", title: "File Storage", subtitle: "Media, documents, and site assets" },
-  deliveries: { kicker: "Logistics", title: "Deliveries Pipeline", subtitle: "Scheduled launches and handoff dates" },
-  profile: { kicker: "Identity", title: "Admin Profile", subtitle: "Your account details and security settings" },
-  clients: { kicker: "CRM", title: "Client Directory", subtitle: "All clients, contacts, and company records" },
-  tickets: { kicker: "Support", title: "Support Tickets", subtitle: "Open issues and client support requests" },
-  audit: { kicker: "Compliance", title: "Audit Logs", subtitle: "Full activity trail across the platform" },
-  api: { kicker: "Developers", title: "API Documentation", subtitle: "Integrate FerixBuilder into your workflows" },
-  templates: { kicker: "Design System", title: "Template Library", subtitle: "Reusable starter templates for new builds" },
+  dashboard: { kicker: "Operations Hub", title: "Dashboard", subtitle: "Overview of deliveries, activity, and metrics" },
+  billing: { kicker: "Financials", title: "Billing", subtitle: "Invoices, payouts, and revenue" },
+  deployments: { kicker: "Infrastructure", title: "Deployments", subtitle: "Build servers and live status" },
+  comms: { kicker: "Communications", title: "Messages", subtitle: "Client conversations and approvals" },
+  projects: { kicker: "Portfolio", title: "Projects", subtitle: "Active website builds" },
+  revisions: { kicker: "Iterations", title: "Revisions", subtitle: "Feedback and approvals queue" },
+  guides: { kicker: "Knowledge Base", title: "Guides", subtitle: "Platform operation docs" },
+  settings: { kicker: "Configuration", title: "Settings", subtitle: "Admin workspace preferences" },
+  notifications: { kicker: "Alerts", title: "Notifications", subtitle: "Platform alerts and updates" },
+  storage: { kicker: "Assets", title: "Storage", subtitle: "Media, files, and documents" },
+  deliveries: { kicker: "Logistics", title: "Deliveries", subtitle: "Launch and handoff schedule" },
+  profile: { kicker: "Identity", title: "Profile", subtitle: "Account and security" },
+  clients: { kicker: "CRM", title: "Clients", subtitle: "Companies and contacts" },
+  tickets: { kicker: "Support", title: "Tickets", subtitle: "Open client support issues" },
+  audit: { kicker: "Compliance", title: "Audit Log", subtitle: "Platform activity trail" },
+  api: { kicker: "Developers", title: "API", subtitle: "Integrations and documentation" },
+  templates: { kicker: "Design System", title: "Templates", subtitle: "Starter templates for builds" },
 };
 
 export const financeStats = [

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { PageKey } from "./types/adminTypes";
 import { mainSections, pageTitles } from "./types/adminTypes";
+import { Icon } from "./components/UIComponents";
 import DashboardPage from "./pages/Dashboard";
 import BillingPage from "./pages/Billing";
 import DeploymentsPage from "./pages/Deployments";
@@ -57,7 +58,9 @@ export default function App() {
       <div className="login-wrapper">
         <div className="login-card">
           <div className="login-brand">
-            <div className="brand-mark">F</div>
+            <div className="brand-mark">
+              <Icon name="layout" size={20} color="#fff" strokeWidth={2.25} />
+            </div>
             <div className="brand-text"><strong>FerixBuilder</strong><span>Platform Admin</span></div>
           </div>
           <h1>Welcome Back</h1>
@@ -88,7 +91,9 @@ export default function App() {
 
       <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-brand">
-          <div className="brand-mark">F</div>
+          <div className="brand-mark">
+            <Icon name="layout" size={20} color="#fff" strokeWidth={2.25} />
+          </div>
           <div className="brand-text"><strong>FerixBuilder</strong><span>Platform Admin</span></div>
         </div>
 
@@ -96,7 +101,7 @@ export default function App() {
           <div className="sidebar-section" key={section.title}>
             <div className="sidebar-section-title">
               <span>{section.title}</span>
-              <span>{section.icon ?? "›"}</span>
+              <Icon name={section.icon} size={14} strokeWidth={2} />
             </div>
             {section.items.map((item) => (
               <button
@@ -105,7 +110,9 @@ export default function App() {
                 className={`sidebar-nav-item ${currentPage === item.page ? "active" : ""}`}
                 onClick={() => handleNav(item.page)}
               >
-                <span className="sidebar-nav-icon">{currentPage === item.page ? "◉" : "⊙"}</span>
+                <span className="sidebar-nav-icon">
+                  <Icon name={item.icon} size={16} strokeWidth={2} />
+                </span>
                 <span className="sidebar-nav-text">{item.label}</span>
                 <span className="sidebar-nav-meta">
                   {item.dot ? <span className={`nav-dot ${item.dot === "active" ? "active" : ""}`} /> : null}
@@ -127,9 +134,11 @@ export default function App() {
 
       <div className="admin-main">
         <header className="admin-topbar">
-          <button className="topbar-menu" type="button" onClick={() => setSidebarOpen((v) => !v)} aria-label="Open navigation">☰</button>
+          <button className="topbar-menu" type="button" onClick={() => setSidebarOpen((v) => !v)} aria-label="Open navigation">
+            <Icon name="menu" size={18} strokeWidth={2.25} />
+          </button>
           <div className="topbar-search">
-            <span>⌕</span>
+            <Icon name="search" size={16} strokeWidth={2} />
             <input placeholder="Search clients, projects..." />
           </div>
           <div className="topbar-tabs">
@@ -138,9 +147,15 @@ export default function App() {
             <span>System</span>
           </div>
           <div className="topbar-actions">
-            <button className="topbar-icon-btn" type="button" aria-label="Toggle theme">⚙</button>
-            <button className="topbar-icon-btn badge" type="button" aria-label="Notifications" onClick={() => handleNav("notifications")}>⚲</button>
-            <button className="topbar-icon-btn badge" type="button" aria-label="Messages" onClick={() => handleNav("comms")}>✉</button>
+            <button className="topbar-icon-btn" type="button" aria-label="Toggle theme">
+              <Icon name="settings" size={17} strokeWidth={2} />
+            </button>
+            <button className="topbar-icon-btn badge" type="button" aria-label="Notifications" onClick={() => handleNav("notifications")}>
+              <Icon name="bell" size={17} strokeWidth={2} />
+            </button>
+            <button className="topbar-icon-btn badge" type="button" aria-label="Messages" onClick={() => handleNav("comms")}>
+              <Icon name="mail" size={17} strokeWidth={2} />
+            </button>
             <div className="topbar-user">
               <div className="topbar-user-text"><strong>Ferix Admin</strong><span>Platform Owner</span></div>
               <div className="topbar-avatar" onClick={() => handleNav("profile")} style={{ cursor: "pointer" }}>FA</div>
@@ -151,26 +166,23 @@ export default function App() {
         <section className="admin-page-head">
           <div className="admin-page-head-left">
             <div className="admin-head-kicker">{meta.kicker}</div>
-            <h1>
-              {currentPage === "dashboard" ? "Welcome," : meta.title.split(" ")[0] + ","}
-              {currentPage === "dashboard" ? (
-                <>
-                  <strong>FerixAdmin</strong>
-                  <p>{meta.subtitle}</p>
-                </>
-              ) : (
-                <>
-                  <strong style={{ fontSize: 30 }}>{meta.title.replace(/^\S+\s?/, "") || "Overview"}</strong>
-                  <p>{meta.subtitle}</p>
-                </>
-              )}
-            </h1>
+            <h2 className="admin-page-title">{meta.title}</h2>
+            {meta.subtitle ? <p className="admin-page-sub">{meta.subtitle}</p> : null}
           </div>
           <div className="admin-page-head-right">
-            <div className="head-date-chip"><span>Today's Deliveries</span><span>▾</span></div>
-            <button className="head-icon-btn" type="button" aria-label="Download Report">⬇</button>
-            <button className="head-icon-btn" type="button" aria-label="Filter Metrics">◷</button>
-            <button className="head-icon-btn" type="button" aria-label="Favorite View">★</button>
+            <div className="head-date-chip">
+              <span>Today&apos;s Deliveries</span>
+              <Icon name="chevronDown" size={14} strokeWidth={2.25} />
+            </div>
+            <button className="head-icon-btn" type="button" aria-label="Download Report">
+              <Icon name="download" size={16} strokeWidth={2} />
+            </button>
+            <button className="head-icon-btn" type="button" aria-label="Filter Metrics">
+              <Icon name="filter" size={16} strokeWidth={2} />
+            </button>
+            <button className="head-icon-btn" type="button" aria-label="Favorite View">
+              <Icon name="star" size={16} strokeWidth={2} />
+            </button>
           </div>
         </section>
 

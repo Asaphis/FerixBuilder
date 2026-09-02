@@ -1,15 +1,9 @@
 import { StatCard, SectionHeader } from "../components/UIComponents";
-import { trpc } from "../lib/trpc";
 
 export default function DashboardPage() {
-  const { data: projects } = trpc.projects.getAll.useQuery();
-  const { data: invoices } = trpc.billing.getAllInvoices.useQuery();
-  const { data: requests } = trpc.projectRequests.getMyRequests.useQuery();
-
-  const activeProjects = projects?.filter(p => p.status !== "COMPLETED" && p.status !== "CANCELLED") || [];
-  const pendingPayments = invoices?.filter(i => i.status === "PENDING" || i.status === "OVERDUE") || [];
-  const totalPendingAmount = pendingPayments.reduce((sum, i) => sum + i.amount, 0);
-  const pendingRequests = requests?.filter(r => r.status === "SUBMITTED" || r.status === "IN_REVIEW") || [];
+  const activeProjects = 0;
+  const totalPendingAmount = 0;
+  const pendingRequests = 0;
 
   return (
     <>
@@ -19,7 +13,7 @@ export default function DashboardPage() {
             <div className="partner-chips">
               <span className="partner-avatar jw">--</span>
               <div className="partner-chip">
-                <strong>{activeProjects.length} Active Projects</strong>
+                <strong>{activeProjects} Active Projects</strong>
                 <span>Connected to backend</span>
               </div>
             </div>
@@ -27,10 +21,10 @@ export default function DashboardPage() {
           </div>
 
           <div className="stat-strip">
-            <StatCard icon="layers" value={activeProjects.length.toString()} label="Active Projects" />
+            <StatCard icon="layers" value={activeProjects.toString()} label="Active Projects" />
             <StatCard icon="chart" value={`$${totalPendingAmount.toLocaleString()}`} label="Pending Payments" />
             <StatCard icon="activity" value="0" label="Revisions Done" />
-            <StatCard icon="spark" value={pendingRequests.length.toString()} label="Requests Pending" footnote="Review quotes" />
+            <StatCard icon="spark" value={pendingRequests.toString()} label="Requests Pending" footnote="Review quotes" />
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
 
-const baseUrl = process.env.BASE_URL ?? "https://3000-iaailze8oirz25lf2j3nz-23cc9dd7.us4.manus.computer";
+const baseUrl = process.env.BASE_URL ?? "http://localhost:5173";
 const hubs = ["/dashboard", "/workspace/project", "/workspace/review", "/workspace/delivery", "/workspace/business", "/workspace/care", "/workspace/support", "/workspace/settings"];
 const legacyRoutes = ["/workspace/onboarding", "/workspace/files", "/workspace/preview", "/workspace/revisions", "/workspace/payments", "/workspace/downloads", "/workspace/customers", "/workspace/products", "/workspace/bookings", "/workspace/domain", "/workspace/technical-care", "/workspace/management", "/workspace/system-health"];
 

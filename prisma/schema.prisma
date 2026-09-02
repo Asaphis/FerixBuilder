@@ -118,19 +118,19 @@ model Project {
   updatedAt       DateTime @updatedAt
 
   customer        Customer @relation(fields: [customerId], references: [id])
-  scope           Scope?
-  features        Feature[]
-  assets          Asset[]
-  milestones      Milestone[]
-  previews        PreviewVersion[]
-  changeRequests  ChangeRequest[]
-  messages        Message[]
-  activityLogs    ActivityLog[]
-  invoices        Invoice[]
-  payments        Payment[]
-  approvals       Approval[]
-  sourceReleases  SourceRelease[]
-  deployments     Deployment[]
+  scope           Scope? @relation("ProjectScope")
+  features        Feature[] @relation("ProjectFeatures")
+  assets          Asset[] @relation("AssetProject")
+  milestones      Milestone[] @relation("ProjectMilestones")
+  previews        PreviewVersion[] @relation("ProjectPreviews")
+  changeRequests  ChangeRequest[] @relation("ProjectChangeRequests")
+  messages        Message[] @relation("ProjectMessages")
+  activityLogs    ActivityLog[] @relation("ProjectActivityLogs")
+  invoices        Invoice[] @relation("ProjectInvoices")
+  payments        Payment[] @relation("ProjectPayments")
+  approvals       Approval[] @relation("ProjectApprovals")
+  sourceReleases  SourceRelease[] @relation("ProjectSourceReleases")
+  deployments     Deployment[] @relation("ProjectDeployments")
   assignments      ProjectAssignment[]
 
   @@index([customerId])
@@ -202,7 +202,7 @@ model ProjectRequest {
   reviewedBy      String?
 
   customer        Customer @relation(fields: [customerId], references: [id])
-  assets          Asset[]
+  assets          Asset[] @relation("AssetRequest")
 
   @@index([customerId])
   @@index([status])
@@ -245,7 +245,7 @@ model Scope {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project @relation(fields: [projectId], references: [projectId])
+  project         Project @relation("ProjectScope", fields: [projectId], references: [projectId])
   features        ScopeFeature[]
   exclusions      ScopeExclusion[]
 
@@ -311,7 +311,7 @@ model Feature {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectFeatures", fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([status])
@@ -346,8 +346,8 @@ model Asset {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project?  @relation(fields: [projectId], references: [projectId])
-  request         ProjectRequest? @relation(fields: [requestId], references: [projectId])
+  project         Project?  @relation("AssetProject", fields: [projectId], references: [projectId])
+  request         ProjectRequest? @relation("AssetRequest", fields: [requestId], references: [projectId])
 
   @@index([projectId])
   @@index([requestId])
@@ -379,7 +379,7 @@ model Milestone {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectMilestones", fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([status])
@@ -436,7 +436,7 @@ model PreviewVersion {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectPreviews", fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([reviewStatus])
@@ -478,7 +478,7 @@ model ChangeRequest {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectChangeRequests", fields: [projectId], references: [id])
   items           ChangeRequestItem[]
   evaluatedByAdmin Admin?   @relation(fields: [evaluatedBy], references: [id])
 
@@ -538,7 +538,7 @@ model Message {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectMessages", fields: [projectId], references: [id])
   customer        Customer @relation(fields: [customerId], references: [id])
 
   @@index([projectId])
@@ -569,10 +569,10 @@ model Invoice {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectInvoices", fields: [projectId], references: [id])
   customer        Customer @relation(fields: [customerId], references: [id])
   items           InvoiceItem[]
-  payments        Payment[]
+  payments        Payment[] @relation("PaymentInvoice")
 
   @@index([projectId])
   @@index([customerId])
@@ -646,8 +646,8 @@ model Payment {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  invoice         Invoice? @relation(fields: [invoiceId], references: [id])
-  project         Project  @relation(fields: [projectId], references: [id])
+  invoice         Invoice? @relation("PaymentInvoice", fields: [invoiceId], references: [id])
+  project         Project  @relation("ProjectPayments", fields: [projectId], references: [id])
   customer        Customer @relation(fields: [customerId], references: [id])
 
   @@index([invoiceId])
@@ -681,7 +681,7 @@ model Approval {
   approvedAt      DateTime @default(now())
   notes           String?
   
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectApprovals", fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([approvalType])
@@ -711,7 +711,7 @@ model SourceRelease {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectSourceReleases", fields: [projectId], references: [id])
 
   @@index([projectId])
 }
@@ -729,7 +729,7 @@ model Deployment {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  project         Project  @relation(fields: [projectId], references: [id])
+  project         Project  @relation("ProjectDeployments", fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([environment])
@@ -763,7 +763,7 @@ model ActivityLog {
   
   createdAt       DateTime @default(now())
 
-  project         Project? @relation(fields: [projectId], references: [id])
+  project         Project? @relation("ProjectActivityLogs", fields: [projectId], references: [projectId])
   admin           Admin?   @relation(fields: [userId], references: [id])
 
   @@index([projectId])

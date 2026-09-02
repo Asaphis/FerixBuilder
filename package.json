@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx watch Backend/_core/index.ts",
     "build": "esbuild Backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build:frontend": "cd Web/frontend && npm run build",
+    "build:admin": "cd Web/admin && npm run build",
+    "build:all": "npm run build && npm run build:frontend && npm run build:admin",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc --noEmit",
     "format": "prettier --write .",

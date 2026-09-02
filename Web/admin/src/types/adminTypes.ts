@@ -91,23 +91,5 @@ export const pageTitles: Record<PageKey, { kicker: string; title: string; subtit
   templates: { kicker: "Design System", title: "Templates", subtitle: "Starter templates for builds" },
 };
 
-export const financeStats = [
-  { label: "Monthly Recurring", value: "$12,450", change: "18.6%", up: true },
-  { label: "Pending Payouts", value: "$3,200", change: "3%", up: false },
-];
-
-export const inventoryRows = [
-  { label: "In Progress", value: "12", badge: "stock" },
-  { label: "Delivered", value: "36", badge: "resolved" },
-];
-
-export const networkRows = [
-  { label: "Builds Triggered", meta: "85 today and 120 yesterday", value: "85", badge: "inprogress" },
-  { label: "Successful Deploys", meta: "Live client websites", value: "82", badge: "resolved" },
-];
-
-export const socialFeedStats = [
-  { label: "Revisions", value: "14" },
-  { label: "Comments", value: "32" },
-  { label: "Approvals", value: "8" },
-];
+// Real data will be fetched from backend API
+// These fake data exports have been removed

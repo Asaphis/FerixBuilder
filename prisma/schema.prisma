@@ -1,0 +1,822 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User and Authentication
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  name          String?
+  phone         String?
+  role          Role     @default(CUSTOMER)
+  emailVerified Boolean  @default(false)
+  lastSignedIn  DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  customer      Customer?
+  admin         Admin?
+
+  @@index([email])
+  @@index([role])
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+// Customer
+model Customer {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  company         String?
+  address         String?
+  city            String?
+  state           String?
+  country         String?
+  timezone        String   @default("UTC")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id])
+  projects        Project[]
+  projectRequests ProjectRequest[]
+  invoices        Invoice[]
+  payments        Payment[]
+  messages        Message[]
+
+  @@index([userId])
+}
+
+// Admin
+model Admin {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  title           String?
+  department      String?
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecret String?
+  backupCodes     String[]
+  permissions     String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id])
+  assignedProjects ProjectAssignment[]
+  activityLogs    ActivityLog[]
+  changeRequests  ChangeRequest[]
+
+  @@index([userId])
+}
+
+// Project
+model Project {
+  id              String   @id @default(cuid())
+  projectId       String   @unique
+  customerId      String
+  requestId       String?
+  name            String
+  description     String?
+  projectType     ProjectType
+  industry        String?
+  status          ProjectStatus @default(DRAFT)
+  priority        Priority @default(MEDIUM)
+  
+  originalPrice   Decimal  @db.Decimal(12, 2)
+  additionalCost  Decimal  @default(0) @db.Decimal(12, 2)
+  currentTotal    Decimal  @default(0) @db.Decimal(12, 2)
+  amountPaid      Decimal  @default(0) @db.Decimal(12, 2)
+  outstandingBalance Decimal @default(0) @db.Decimal(12, 2)
+  currency        String   @default("NGN")
+  
+  estimatedWeeks  Int?
+  startDate       DateTime?
+  estimatedCompletion DateTime?
+  actualCompletion DateTime?
+  deliveredAt     DateTime?
+  
+  revisionAllowance Int     @default(3)
+  revisionRoundsUsed Int    @default(0)
+  
+  scopeLockedAt   DateTime?
+  scopeLockedBy   String?
+  
+  finalApprovedAt DateTime?
+  finalApprovedBy String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  customer        Customer @relation(fields: [customerId], references: [id])
+  scope           Scope?
+  features        Feature[]
+  assets          Asset[]
+  milestones      Milestone[]
+  previews        PreviewVersion[]
+  changeRequests  ChangeRequest[]
+  messages        Message[]
+  activityLogs    ActivityLog[]
+  invoices        Invoice[]
+  payments        Payment[]
+  approvals       Approval[]
+  sourceReleases  SourceRelease[]
+  deployments     Deployment[]
+  assignments      ProjectAssignment[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([projectId])
+  @@index([requestId])
+}
+
+enum ProjectType {
+  WEBSITE
+  APPLICATION
+  E_COMMERCE
+  CUSTOM
+}
+
+enum ProjectStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  SCOPE_PENDING
+  IN_DEVELOPMENT
+  INTERNAL_QA
+  PREVIEW
+  CUSTOMER_REVIEW
+  REVISION
+  FINAL_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// ProjectRequest
+model ProjectRequest {
+  id              String   @id @default(cuid())
+  projectId       String   @unique
+  customerId      String
+  name            String
+  description     String
+  projectType     ProjectType
+  industry        String?
+  targetAudience  String?
+  goals           String?
+  successCriteria String?
+  
+  features        Json
+  pages           Json
+  
+  brandColors     Json?
+  typography      String?
+  stylePreference String?
+  
+  platform        String?
+  technology      String?
+  integrations    Json?
+  
+  domainStatus    String?
+  hostingPreference String?
+  
+  status          RequestStatus @default(SUBMITTED)
+  adminNotes      String?
+  submittedAt     DateTime @default(now())
+  reviewedAt      DateTime?
+  reviewedBy      String?
+
+  customer        Customer @relation(fields: [customerId], references: [id])
+  assets          Asset[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([projectId])
+}
+
+enum RequestStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  CLARIFICATION_REQUESTED
+}
+
+// Scope
+model Scope {
+  id              String   @id @default(cuid())
+  projectId       String   @unique
+  
+  originalPrice   Decimal  @db.Decimal(12, 2)
+  currency        String   @default("NGN")
+  paymentTerms    String   @default("FINAL_PAYMENT")
+  
+  estimatedWeeks  Int
+  startDate       DateTime
+  estimatedCompletion DateTime
+  
+  revisionAllowance Int     @default(3)
+  revisionDefinition String
+  additionalRevisionCost Decimal @db.Decimal(12, 2)
+  
+  terms           String   @db.Text
+  
+  status          ScopeStatus @default(DRAFT)
+  sentToCustomerAt DateTime?
+  customerApprovedAt DateTime?
+  lockedAt        DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  features        ScopeFeature[]
+  exclusions      ScopeExclusion[]
+
+  @@index([projectId])
+  @@index([status])
+}
+
+enum ScopeStatus {
+  DRAFT
+  SENT
+  APPROVED
+  LOCKED
+}
+
+// ScopeFeature
+model ScopeFeature {
+  id              String   @id @default(cuid())
+  scopeId         String
+  category        String
+  name            String
+  description     String?
+  subItems        Json?
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  scope           Scope    @relation(fields: [scopeId], references: [id])
+
+  @@index([scopeId])
+}
+
+// ScopeExclusion
+model ScopeExclusion {
+  id              String   @id @default(cuid())
+  scopeId         String
+  name            String
+  reason          String
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  scope           Scope    @relation(fields: [scopeId], references: [id])
+
+  @@index([scopeId])
+}
+
+// Feature
+model Feature {
+  id              String   @id @default(cuid())
+  projectId       String
+  category        String
+  name            String
+  description     String?
+  status          FeatureStatus @default(NOT_STARTED)
+  priority        Priority @default(MEDIUM)
+  assignedTo      String?
+  dueDate         DateTime?
+  completedAt     DateTime?
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([status])
+  @@index([assignedTo])
+}
+
+enum FeatureStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+  CANCELLED
+}
+
+// Asset
+model Asset {
+  id              String   @id @default(cuid())
+  projectId       String?
+  requestId       String?
+  customerId      String?
+  fileName        String
+  filePath        String
+  fileSize        Int
+  fileType        String
+  mimeType        String
+  category        AssetCategory
+  uploadedBy      String
+  
+  cloudinaryPublicId String?
+  cloudinaryUrl   String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project?  @relation(fields: [projectId], references: [projectId])
+  request         ProjectRequest? @relation(fields: [requestId], references: [projectId])
+
+  @@index([projectId])
+  @@index([requestId])
+  @@index([customerId])
+  @@index([category])
+}
+
+enum AssetCategory {
+  LOGO
+  IMAGE
+  DOCUMENT
+  DESIGN_REFERENCE
+  BRAND_GUIDELINE
+  OTHER
+}
+
+// Milestone
+model Milestone {
+  id              String   @id @default(cuid())
+  projectId       String
+  name            String
+  description     String?
+  dueDate         DateTime
+  status          MilestoneStatus @default(NOT_STARTED)
+  completedAt     DateTime?
+  sortOrder       Int      @default(0)
+  dependencies    Json?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([status])
+}
+
+enum MilestoneStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+// ProjectAssignment
+model ProjectAssignment {
+  id              String   @id @default(cuid())
+  projectId       String
+  adminId         String
+  role            ProjectRole
+  assignedAt      DateTime @default(now())
+  
+  project         Project  @relation(fields: [projectId], references: [id])
+  admin           Admin    @relation(fields: [adminId], references: [id])
+
+  @@unique([projectId, adminId])
+  @@index([projectId])
+  @@index([adminId])
+}
+
+enum ProjectRole {
+  PROJECT_MANAGER
+  DEVELOPER
+  DESIGNER
+  QA_ENGINEER
+}
+
+// PreviewVersion
+model PreviewVersion {
+  id              String   @id @default(cuid())
+  projectId       String
+  version         String
+  releaseNotes    String   @db.Text
+  changes         Json
+  knownIssues     String?
+  
+  previewUrl      String
+  accessToken     String
+  expiresAt       DateTime
+  
+  reviewStatus    ReviewStatus @default(PENDING)
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  reviewComments  String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([reviewStatus])
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  CHANGES_REQUESTED
+}
+
+// ChangeRequest
+model ChangeRequest {
+  id              String   @id @default(cuid())
+  projectId       String
+  crNumber        String   @unique
+  title           String
+  description     String   @db.Text
+  category        String
+  priority        Priority @default(MEDIUM)
+  
+  attachments     Json?
+  
+  classification  CRClassification @default(PENDING)
+  additionalCost  Decimal? @db.Decimal(12, 2)
+  additionalDays  Int?
+  evaluationNotes String?
+  evaluatedBy     String?
+  evaluatedAt     DateTime?
+  
+  customerApproved Boolean @default(false)
+  customerApprovedAt DateTime?
+  customerDeclinedAt DateTime?
+  declineReason   String?
+  
+  status          CRStatus @default(PENDING_REVIEW)
+  completedAt     DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+  items           ChangeRequestItem[]
+  evaluatedByAdmin Admin?   @relation(fields: [evaluatedBy], references: [id])
+
+  @@index([projectId])
+  @@index([status])
+  @@index([crNumber])
+}
+
+enum CRClassification {
+  PENDING
+  INCLUDED_IN_SCOPE
+  REVISION
+  ADDITIONAL_FEATURE
+  BUG_FIX
+}
+
+enum CRStatus {
+  PENDING_REVIEW
+  QUOTED
+  AWAITING_APPROVAL
+  APPROVED
+  DECLINED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// ChangeRequestItem
+model ChangeRequestItem {
+  id              String   @id @default(cuid())
+  changeRequestId String
+  description     String
+  additionalCost  Decimal? @db.Decimal(12, 2)
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  changeRequest   ChangeRequest @relation(fields: [changeRequestId], references: [id])
+
+  @@index([changeRequestId])
+}
+
+// Message
+model Message {
+  id              String   @id @default(cuid())
+  projectId       String
+  customerId      String
+  senderId        String
+  senderRole      Role
+  subject         String?
+  content         String   @db.Text
+  attachments     Json?
+  isRead          Boolean  @default(false)
+  readAt          DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id])
+
+  @@index([projectId])
+  @@index([customerId])
+  @@index([isRead])
+}
+
+// Invoice
+model Invoice {
+  id              String   @id @default(cuid())
+  invoiceNumber   String   @unique
+  projectId       String
+  customerId      String
+  
+  invoiceDate     DateTime @default(now())
+  dueDate         DateTime
+  subtotal        Decimal  @db.Decimal(12, 2)
+  tax             Decimal  @default(0) @db.Decimal(12, 2)
+  total           Decimal  @db.Decimal(12, 2)
+  currency        String   @default("NGN")
+  
+  status          InvoiceStatus @default(DRAFT)
+  sentAt          DateTime?
+  paidAt          DateTime?
+  
+  notes           String?  @db.Text
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id])
+  items           InvoiceItem[]
+  payments        Payment[]
+
+  @@index([projectId])
+  @@index([customerId])
+  @@index([status])
+  @@index([invoiceNumber])
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+// InvoiceItem
+model InvoiceItem {
+  id              String   @id @default(cuid())
+  invoiceId       String
+  description     String
+  quantity        Int      @default(1)
+  unitPrice       Decimal  @db.Decimal(12, 2)
+  total           Decimal  @db.Decimal(12, 2)
+  itemType        InvoiceItemType
+  referenceId     String?
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id])
+
+  @@index([invoiceId])
+  @@index([itemType])
+}
+
+enum InvoiceItemType {
+  ORIGINAL_PROJECT
+  CHANGE_REQUEST
+  REVISION
+  ADDITIONAL_SERVICE
+  HOSTING
+  MAINTENANCE
+  OTHER
+}
+
+// Payment
+model Payment {
+  id              String   @id @default(cuid())
+  paymentId       String   @unique
+  invoiceId       String?
+  projectId       String
+  customerId      String
+  
+  amount          Decimal  @db.Decimal(12, 2)
+  currency        String   @default("NGN")
+  paymentMethod   PaymentMethod
+  paymentDate     DateTime @default(now())
+  
+  gateway         String
+  gatewayResponse Json?
+  referenceNumber String?
+  transactionId   String?
+  
+  status          PaymentStatus @default(PENDING)
+  
+  refundedAmount  Decimal  @default(0) @db.Decimal(12, 2)
+  refundedAt      DateTime?
+  refundReason    String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  invoice         Invoice? @relation(fields: [invoiceId], references: [id])
+  project         Project  @relation(fields: [projectId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id])
+
+  @@index([invoiceId])
+  @@index([projectId])
+  @@index([customerId])
+  @@index([status])
+  @@index([paymentId])
+}
+
+enum PaymentMethod {
+  PAYSTACK
+  BANK_TRANSFER
+  CASH
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+// Approval
+model Approval {
+  id              String   @id @default(cuid())
+  projectId       String
+  approvalType    ApprovalType
+  approvedBy      String
+  approvedAt      DateTime @default(now())
+  notes           String?
+  
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([approvalType])
+}
+
+enum ApprovalType {
+  SCOPE_APPROVAL
+  PREVIEW_APPROVAL
+  FINAL_APPROVAL
+  CHANGE_REQUEST_APPROVAL
+}
+
+// SourceRelease
+model SourceRelease {
+  id              String   @id @default(cuid())
+  projectId       String
+  version         String
+  packagePath     String
+  packageSize     Int
+  checksum        String
+  downloadUrl     String
+  accessToken     String
+  expiresAt       DateTime
+  releasedBy      String
+  downloadCount   Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+}
+
+// Deployment
+model Deployment {
+  id              String   @id @default(cuid())
+  projectId       String
+  environment     DeploymentEnvironment
+  url             String
+  deployedBy      String
+  deployedAt      DateTime @default(now())
+  status          DeploymentStatus @default(PENDING)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([environment])
+}
+
+enum DeploymentEnvironment {
+  PREVIEW
+  STAGING
+  PRODUCTION
+}
+
+enum DeploymentStatus {
+  PENDING
+  DEPLOYING
+  SUCCESS
+  FAILED
+}
+
+// ActivityLog
+model ActivityLog {
+  id              String   @id @default(cuid())
+  projectId       String?
+  userId          String?
+  action          String
+  resource        String?
+  resourceId      String?
+  details         Json?
+  ipAddress       String?
+  userAgent       String?
+  status          String   @default("SUCCESS")
+  
+  createdAt       DateTime @default(now())
+
+  project         Project? @relation(fields: [projectId], references: [id])
+  admin           Admin?   @relation(fields: [userId], references: [id])
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// Notification
+model Notification {
+  id              String   @id @default(cuid())
+  userId          String
+  type            NotificationType
+  title           String
+  message         String   @db.Text
+  link            String?
+  isRead          Boolean  @default(false)
+  readAt          DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([type])
+}
+
+enum NotificationType {
+  PROJECT_UPDATE
+  SCOPE_APPROVED
+  SCOPE_SENT
+  PREVIEW_READY
+  CHANGE_REQUEST_QUOTED
+  CHANGE_REQUEST_APPROVED
+  INVOICE_SENT
+  PAYMENT_RECEIVED
+  SOURCE_RELEASED
+  MESSAGE_RECEIVED
+  SYSTEM
+}
+
+// Plan
+model Plan {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  price           Decimal  @db.Decimal(12, 2)
+  currency        String   @default("NGN")
+  features        Json
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([isActive])
+}

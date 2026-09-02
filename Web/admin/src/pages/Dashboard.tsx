@@ -1,32 +1,36 @@
 import { StatCard, SectionHeader } from "../components/UIComponents";
-import { financeStats, inventoryRows, networkRows, socialFeedStats } from "../types/adminTypes";
+import { trpc } from "../lib/trpc";
 
 export default function DashboardPage() {
+  const { data: projects } = trpc.projects.getAll.useQuery();
+  const { data: invoices } = trpc.billing.getAllInvoices.useQuery();
+  const { data: requests } = trpc.projectRequests.getMyRequests.useQuery();
+
+  const activeProjects = projects?.filter(p => p.status !== "COMPLETED" && p.status !== "CANCELLED") || [];
+  const pendingPayments = invoices?.filter(i => i.status === "PENDING" || i.status === "OVERDUE") || [];
+  const totalPendingAmount = pendingPayments.reduce((sum, i) => sum + i.amount, 0);
+  const pendingRequests = requests?.filter(r => r.status === "SUBMITTED" || r.status === "IN_REVIEW") || [];
+
   return (
     <>
       <section className="welcome-hero">
         <div>
           <div className="welcome-row">
             <div className="partner-chips">
-              <span className="partner-avatar jw">AC</span>
+              <span className="partner-avatar jw">--</span>
               <div className="partner-chip">
-                <strong>Acme Corp</strong>
-                <span>Active</span>
-              </div>
-              <span className="partner-avatar mt">ZL</span>
-              <div className="partner-chip">
-                <strong>Zenith Labs</strong>
-                <span>Active</span>
+                <strong>{activeProjects.length} Active Projects</strong>
+                <span>Connected to backend</span>
               </div>
             </div>
-            <span className="welcome-note">Your top 2 clients with pending website deliveries today.</span>
+            <span className="welcome-note">Real-time project data from backend API.</span>
           </div>
 
           <div className="stat-strip">
-            <StatCard iconClass="level3" icon="◎" value="15" label="Active Projects" />
-            <StatCard iconClass="rank" icon="★" value="$12k" label="Pending Payments" />
-            <StatCard iconClass="tasks" icon="✓" value="42" label="Revisions Done" />
-            <StatCard iconClass="profile" icon="♦" value="5 New" label="Requests Pending" footnote="Review quotes" />
+            <StatCard icon="layers" value={activeProjects.length.toString()} label="Active Projects" />
+            <StatCard icon="chart" value={`$${totalPendingAmount.toLocaleString()}`} label="Pending Payments" />
+            <StatCard icon="activity" value="0" label="Revisions Done" />
+            <StatCard icon="spark" value={pendingRequests.length.toString()} label="Requests Pending" footnote="Review quotes" />
           </div>
         </div>
 
@@ -39,9 +43,9 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="tip-content">
-            <div className="tip-content-icon">New</div>
-            <strong>New Project Request</strong>
-            <p>Review the latest requirements submitted by Acme Corp for their new custom website build.</p>
+            <div className="tip-content-icon">Setup</div>
+            <strong>Backend Integration Required</strong>
+            <p>Connect the backend API to display real project data and client information.</p>
           </div>
         </aside>
       </section>
@@ -55,10 +59,10 @@ export default function DashboardPage() {
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="credit-card">
-            <div className="card-brand">Stripe Connected</div>
+            <div className="card-brand">Payment Gateway</div>
             <div className="card-number">Revenue Overview</div>
             <div className="card-bottom">
-              <div className="card-meta"><small>Status</small><strong>Active</strong></div>
+              <div className="card-meta"><small>Status</small><strong>Not Connected</strong></div>
               <div>
                 <small className="card-meta">FerixBuilder</small>
                 <div className="card-mark"><span /><span /></div>
@@ -66,15 +70,18 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="stat-row">
-            {financeStats.map((s) => (
-              <div className="stat-row-item" key={s.label}>
-                <small>{s.label}</small>
-                <strong>{s.value}</strong>
-                <span className={s.up ? "" : "down"}>{s.up ? "▲" : "▼"} {s.change}</span>
-              </div>
-            ))}
+            <div className="stat-row-item">
+              <small>Monthly Recurring</small>
+              <strong>$0</strong>
+              <span>--</span>
+            </div>
+            <div className="stat-row-item">
+              <small>Pending Payouts</small>
+              <strong>$0</strong>
+              <span>--</span>
+            </div>
           </div>
-          <div className="kpi-chip"><strong>$45,250</strong><span>Total Invoiced</span></div>
+          <div className="kpi-chip"><strong>$0</strong><span>Total Invoiced</span></div>
         </article>
 
         <article className="widget-card">
@@ -85,24 +92,29 @@ export default function DashboardPage() {
           <div className="two-col-row">
             <div className="stat-row-item" style={{ background: "linear-gradient(145deg, #ffe9cf 0%, #ffcf98 100%)", border: "none" }}>
               <small style={{ color: "#8c5614" }}>Completed Sites</small>
-              <strong style={{ color: "#5b3803" }}>142</strong>
+              <strong style={{ color: "#5b3803" }}>0</strong>
             </div>
             <div style={{ display: "grid", gap: 10 }}>
-              <div className="stat-row-item"><small>Custom Web Apps</small><strong>45 Active</strong><span>▲ 15%</span></div>
-              <div className="stat-row-item"><small>Business Sites</small><strong>97 Active</strong><span>▲ 12%</span></div>
+              <div className="stat-row-item"><small>Custom Web Apps</small><strong>0 Active</strong><span>--</span></div>
+              <div className="stat-row-item"><small>Business Sites</small><strong>0 Active</strong><span>--</span></div>
             </div>
           </div>
-          <div className="kpi-chip"><strong>15</strong><span>Active Revisions &nbsp; 3 Pending</span></div>
+          <div className="kpi-chip"><strong>0</strong><span>Active Revisions &nbsp; 0 Pending</span></div>
           <div>
-            {inventoryRows.map((r) => (
-              <div className="list-line" key={r.label}>
-                <div><strong>{r.label}</strong></div>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
-                  <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>{r.value}</strong>
-                  <span className={`line-badge ${r.badge}`}>{r.label === "In Progress" ? "In Progress" : "Delivered"}</span>
-                </div>
+            <div className="list-line">
+              <div><strong>In Progress</strong></div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
+                <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>0</strong>
+                <span className="line-badge stock">In Progress</span>
               </div>
-            ))}
+            </div>
+            <div className="list-line">
+              <div><strong>Delivered</strong></div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
+                <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>0</strong>
+                <span className="line-badge resolved">Delivered</span>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -123,17 +135,22 @@ export default function DashboardPage() {
               <path d="M10 78 C 50 52, 80 98, 110 86 S 170 28, 200 48 S 260 72, 300 34" fill="none" stroke="#ef5b7d" strokeWidth="3" strokeLinecap="round" />
             </svg>
           </div>
-          <div className="kpi-chip"><strong>Build Servers</strong><span>#EU-WEST-1 &nbsp; • &nbsp; 45% Load</span></div>
+          <div className="kpi-chip"><strong>Build Servers</strong><span>Not Configured</span></div>
           <div>
-            {networkRows.map((r) => (
-              <div className="list-line" key={r.label}>
-                <div><strong>{r.label}</strong><small>{r.meta}</small></div>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
-                  <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>{r.value}</strong>
-                  <span className={`line-badge ${r.badge}`}>{r.badge === "resolved" ? "Success" : "Building"}</span>
-                </div>
+            <div className="list-line">
+              <div><strong>Builds Triggered</strong><small>No data</small></div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
+                <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>0</strong>
+                <span className="line-badge inprogress">Building</span>
               </div>
-            ))}
+            </div>
+            <div className="list-line">
+              <div><strong>Successful Deploys</strong><small>No data</small></div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 18 }}>
+                <strong style={{ fontSize: 16, letterSpacing: "-0.02em" }}>0</strong>
+                <span className="line-badge resolved">Success</span>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -143,24 +160,26 @@ export default function DashboardPage() {
             <button className="widget-more" type="button">⋯</button>
           </div>
           <div className="feed-card">
-            <img src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=modern%20website%20dashboard%20mockup%20on%20laptop%2C%20clean%20ui%20ux%20design%2C%20pastel%20background&image_size=portrait_4_3" alt="Website Preview" />
+            <div style={{ width: "100%", height: 120, background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
+              <span style={{ color: "#999" }}>No preview available</span>
+            </div>
             <div className="feed-copy">
-              <div><small>Latest Requirement</small><strong>Zenith Labs</strong><small>E-commerce Site</small></div>
+              <div><small>Latest Requirement</small><strong>No data</strong><small>--</small></div>
               <div className="feed-stats">
-                {socialFeedStats.map((s) => (
-                  <span className="feed-stat" key={s.label}><strong>{s.value}</strong><span>{s.label}</span></span>
-                ))}
+                <span className="feed-stat"><strong>0</strong><span>Revisions</span></span>
+                <span className="feed-stat"><strong>0</strong><span>Comments</span></span>
+                <span className="feed-stat"><strong>0</strong><span>Approvals</span></span>
               </div>
             </div>
           </div>
           <div className="feed-tile">
             <div className="feed-tile-item social">
               <div className="feed-tile-icon">Ticket</div>
-              <div className="feed-tile-copy"><strong>New Ticket</strong><small>Domain connection assistance needed...</small></div>
+              <div className="feed-tile-copy"><strong>No Tickets</strong><small>Support tickets will appear here</small></div>
             </div>
             <div className="feed-tile-item bookmark">
               <div className="feed-tile-icon">Done</div>
-              <div className="feed-tile-copy"><strong>Approved</strong><small>Client accepted final delivery</small></div>
+              <div className="feed-tile-copy"><strong>No Approvals</strong><small>Client approvals will appear here</small></div>
             </div>
           </div>
         </article>

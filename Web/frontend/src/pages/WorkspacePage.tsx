@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import FeatureSurface from "./FeatureSurface";
-import { getPreviewAccount } from "@/lib/customerAccess";
+import { trpc } from "@/lib/trpc";
 
 type IconType = ComponentType<{ size?: number }>;
 export type WorkspacePageKey = "dashboard" | "project" | "review" | "delivery" | "business" | "care" | "support" | "settings";
@@ -149,8 +149,13 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
   const [notice, setNotice] = useState<string | null>(null);
   const [heroActionVersion, setHeroActionVersion] = useState(0);
   const [workflowLoading, setWorkflowLoading] = useState<string | null>(null);
-  const account = getPreviewAccount();
-  const accountName = account?.fullName || "FerixBuilder customer";
+  
+  // Fetch real data from backend
+  const { data: user } = trpc.auth.me.useQuery();
+  const { data: projects } = trpc.projects.getMyProjects.useQuery();
+  const { data: requests } = trpc.projectRequests.getMyRequests.useQuery();
+  
+  const accountName = user?.name || "FerixBuilder customer";
   const info = hubs[page];
   const defaultTab = initialTab ?? info.tabs?.[0]?.id;
   const [activeTab, setActiveTab] = useState(defaultTab);

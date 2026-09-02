@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: parseInt(env.VITE_PORT || "5173"),
       host: true,
+      allowedHosts: ["build.ferixas.com", "buildportal.ferixas.com", "localhost"],
     },
   };
 });

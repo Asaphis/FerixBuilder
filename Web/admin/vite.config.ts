@@ -20,6 +20,8 @@ export default defineConfig({
     host: true,
     port: 5174,
     allowedHosts: [
+      "build.ferixas.com",
+      "buildportal.ferixas.com",
       "localhost",
       "127.0.0.1",
     ],

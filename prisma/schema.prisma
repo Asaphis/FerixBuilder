@@ -245,6 +245,7 @@ model Scope {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  project         Project @relation(fields: [projectId], references: [projectId])
   features        ScopeFeature[]
   exclusions      ScopeExclusion[]
 

@@ -57,12 +57,12 @@ npm install --legacy-peer-deps
 cd Web/frontend && npm install --legacy-peer-deps
 cd ../admin && npm install --legacy-peer-deps
 cd ../..
+npx prisma generate
 ```
 
 ### Run Prisma Migration on Server
 ```bash
 npx prisma migrate deploy
-npx prisma generate
 ```
 
 ### Build Backend

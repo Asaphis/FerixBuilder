@@ -160,45 +160,24 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
 
     const fetchData = async () => {
       try {
-        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
 
         // Fetch user
-        const userRes = await fetch(`${API_URL}/auth.me`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ input: { token } }),
+        const userRes = await fetch(`${API_URL}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const userData = await userRes.json();
-        if (userData.result?.data) {
-          setUser(userData.result.data);
-        }
-
-        // Fetch projects
-        const projectsRes = await fetch(`${API_URL}/projects.getMyProjects`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ input: {} }),
-        });
-        const projectsData = await projectsRes.json();
-        if (projectsData.result?.data) {
-          setProjects(projectsData.result.data);
+        if (userData.id) {
+          setUser(userData);
         }
 
         // Fetch requests
-        const requestsRes = await fetch(`${API_URL}/projectRequests.getMyRequests`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ input: {} }),
+        const requestsRes = await fetch(`${API_URL}/project-requests/user/${userData.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const requestsData = await requestsRes.json();
-        if (requestsData.result?.data) {
-          setRequests(requestsData.result.data);
+        if (Array.isArray(requestsData)) {
+          setRequests(requestsData);
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);

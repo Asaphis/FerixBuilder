@@ -1,39 +1,58 @@
-const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
+const API_BASE = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
 
 export interface AuthResponse {
-  success: boolean;
+  token?: string;
   user?: {
     id: string;
     email: string;
     name?: string;
     role: string;
   };
-  tokens?: {
-    accessToken: string;
-    refreshToken: string;
-  };
+  message?: string;
+  error?: string;
 }
 
-async function tRPCCall(procedure: string, input?: any) {
-  const response = await fetch(`${API_URL}/${procedure}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input ? { input } : {}),
+async function apiRequest(endpoint: string, options: RequestInit = {}) {
+  const url = `${API_BASE}${endpoint}`;
+  
+  const token = localStorage.getItem('adminToken');
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options.headers as Record<string, string>),
+  };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    ...options,
+    headers,
   });
 
-  const data = await response.json();
-  if (data.error) {
-    throw new Error(data.error.message || "API call failed");
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(error.error || 'Request failed');
   }
-  return data.result?.data;
+
+  return response.json();
 }
 
 export async function loginUser(email: string, password: string): Promise<AuthResponse> {
-  return tRPCCall("auth.login", { email, password });
+  const response = await apiRequest('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+  
+  if (response.token) {
+    localStorage.setItem('adminToken', response.token);
+  }
+  
+  return response;
 }
 
-export async function getCurrentUser(token: string) {
-  return tRPCCall("auth.me", { token });
+export async function getCurrentUser() {
+  return apiRequest('/auth/me');
 }
 
 export function setAuthToken(token: string) {

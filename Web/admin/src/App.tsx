@@ -61,8 +61,8 @@ export default function App() {
       const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
       try {
-        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
-        const response = await fetch(`${API_URL}/auth.login`, {
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
+        const response = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
@@ -71,12 +71,12 @@ export default function App() {
         const data = await response.json();
 
         if (data.error) {
-          alert(data.error.message || 'Login failed');
+          alert(data.error || 'Login failed');
           return;
         }
 
-        if (data.result?.data?.success) {
-          localStorage.setItem('adminToken', data.result.data.tokens.accessToken);
+        if (data.token) {
+          localStorage.setItem('adminToken', data.token);
           setIsAuthenticated(true);
         } else {
           alert('Login failed');

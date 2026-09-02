@@ -19,17 +19,21 @@ export default function Contact() {
 
     setLoading(true);
     try {
-      const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
-      const response = await fetch(`${API_URL}/contact.submit`, {
+      const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
+      const response = await fetch(`${API_URL}/contact/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          input: { name, businessName, email, serviceType, message },
+          name,
+          business: businessName,
+          email,
+          serviceType,
+          message,
         }),
       });
 
       const data = await response.json();
-      if (data.result?.data) {
+      if (data.success) {
         setSent(true);
       } else {
         alert("Failed to submit contact form. Please try again.");

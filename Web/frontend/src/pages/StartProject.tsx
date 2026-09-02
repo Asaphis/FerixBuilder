@@ -22,23 +22,21 @@ export default function StartProject() {
 
     setLoading(true);
     try {
-      const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
-      const response = await fetch(`${API_URL}/projectRequests.create`, {
+      const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
+      const response = await fetch(`${API_URL}/project-requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          input: {
-            name: businessName,
-            description: message,
-            projectType: projectTypeMapping[serviceType],
-            features: { serviceType },
-            pages: [],
-          },
+          name,
+          businessName,
+          email,
+          serviceType,
+          message,
         }),
       });
 
       const data = await response.json();
-      if (data.result?.data) {
+      if (data.id) {
         setSent(true);
       } else {
         alert("Failed to submit project request. Please try again.");

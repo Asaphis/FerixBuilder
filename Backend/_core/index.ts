@@ -2,10 +2,12 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "../routers";
-import { createContext } from "./context";
-import { serveStatic, setupVite } from "./vite";
+import cors from "cors";
+import authRoutes from "../routes/auth.js";
+import projectRequestRoutes from "../routes/projectRequests.js";
+import contactRoutes from "../routes/contact.js";
+import adminRoutes from "../routes/admin.js";
+import { serveStatic } from "./vite";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -29,21 +31,25 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
-  // Configure body parser with larger size limit for file uploads
+
+  // Middleware
+  app.use(cors());
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  // tRPC API
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-    })
-  );
-  // development mode uses Vite, production mode uses static files
-  if (process.env.NODE_ENV === "development") {
-    await setupVite(app, server);
-  } else {
+
+  // API Routes
+  app.use('/api/auth', authRoutes);
+  app.use('/api/project-requests', projectRequestRoutes);
+  app.use('/api/contact', contactRoutes);
+  app.use('/api/admin', adminRoutes);
+
+  // Health check
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
+  // Serve static files in production
+  if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   }
 
@@ -56,6 +62,7 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    console.log(`API available at http://localhost:${port}/api`);
   });
 }
 

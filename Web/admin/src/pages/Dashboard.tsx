@@ -4,9 +4,7 @@ import { getAuthToken } from "../lib/realAuth";
 
 export default function DashboardPage() {
   const [activeProjects, setActiveProjects] = useState(0);
-  const [totalPendingAmount, setTotalPendingAmount] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -14,57 +12,20 @@ export default function DashboardPage() {
       if (!token) return;
 
       try {
-        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api";
 
-        // Fetch projects count
-        const projectsRes = await fetch(`${API_URL}/projects.getAll`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ input: {} }),
+        // Fetch stats from admin API
+        const statsRes = await fetch(`${API_URL}/admin/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        const projectsData = await projectsRes.json();
-        if (projectsData.result?.data) {
-          setActiveProjects(projectsData.result.data.length || 0);
-        }
-
-        // Fetch pending requests
-        const requestsRes = await fetch(`${API_URL}/projectRequests.getAll`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ input: {} }),
-        });
-        const requestsData = await requestsRes.json();
-        if (requestsData.result?.data) {
-          const pending = requestsData.result.data.filter((r: any) => r.status === "PENDING").length;
-          setPendingRequests(pending);
-        }
-
-        // Fetch pending payments
-        const billingRes = await fetch(`${API_URL}/billing.getInvoices`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ input: {} }),
-        });
-        const billingData = await billingRes.json();
-        if (billingData.result?.data) {
-          const pendingPayments = billingData.result.data
-            .filter((inv: any) => inv.status === "PENDING")
-            .reduce((sum: number, inv: any) => sum + (inv.totalAmount || 0), 0);
-          setTotalPendingAmount(pendingPayments);
+        const statsData = await statsRes.json();
+        
+        if (statsData) {
+          setActiveProjects(statsData.activeProjects || 0);
+          setPendingRequests(statsData.pendingRequests || 0);
         }
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -88,7 +49,7 @@ export default function DashboardPage() {
 
           <div className="stat-strip">
             <StatCard icon="layers" value={activeProjects.toString()} label="Active Projects" />
-            <StatCard icon="chart" value={`$${totalPendingAmount.toLocaleString()}`} label="Pending Payments" />
+            <StatCard icon="chart" value="$0" label="Pending Payments" />
             <StatCard icon="activity" value="0" label="Revisions Done" />
             <StatCard icon="spark" value={pendingRequests.toString()} label="Requests Pending" footnote="Review quotes" />
           </div>

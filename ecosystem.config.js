@@ -22,7 +22,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         VITE_PORT: 5173,
-        VITE_API_URL: 'http://localhost:5006/api/trpc'
+        VITE_API_URL: 'http://localhost:5006/api'
       },
       instances: 1,
       exec_mode: 'fork',
@@ -38,7 +38,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         VITE_PORT: 5174,
-        VITE_API_URL: 'http://localhost:5006/api/trpc'
+        VITE_API_URL: 'http://localhost:5006/api'
       },
       instances: 1,
       exec_mode: 'fork',

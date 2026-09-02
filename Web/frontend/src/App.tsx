@@ -1,5 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
 import { Route, Switch } from "wouter";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
@@ -21,7 +19,5 @@ function Router() {
 }
 
 export default function App() {
-  const [queryClient] = useState(() => new QueryClient());
-
-  return <QueryClientProvider client={queryClient}><Router /></QueryClientProvider>;
+  return <Router />;
 }

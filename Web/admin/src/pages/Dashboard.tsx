@@ -1,9 +1,75 @@
 import { StatCard, SectionHeader } from "../components/UIComponents";
+import { useState, useEffect } from "react";
+import { getAuthToken } from "../lib/realAuth";
 
 export default function DashboardPage() {
-  const activeProjects = 0;
-  const totalPendingAmount = 0;
-  const pendingRequests = 0;
+  const [activeProjects, setActiveProjects] = useState(0);
+  const [totalPendingAmount, setTotalPendingAmount] = useState(0);
+  const [pendingRequests, setPendingRequests] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const token = getAuthToken();
+      if (!token) return;
+
+      try {
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/trpc";
+
+        // Fetch projects count
+        const projectsRes = await fetch(`${API_URL}/projects.getAll`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ input: {} }),
+        });
+        const projectsData = await projectsRes.json();
+        if (projectsData.result?.data) {
+          setActiveProjects(projectsData.result.data.length || 0);
+        }
+
+        // Fetch pending requests
+        const requestsRes = await fetch(`${API_URL}/projectRequests.getAll`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ input: {} }),
+        });
+        const requestsData = await requestsRes.json();
+        if (requestsData.result?.data) {
+          const pending = requestsData.result.data.filter((r: any) => r.status === "PENDING").length;
+          setPendingRequests(pending);
+        }
+
+        // Fetch pending payments
+        const billingRes = await fetch(`${API_URL}/billing.getInvoices`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ input: {} }),
+        });
+        const billingData = await billingRes.json();
+        if (billingData.result?.data) {
+          const pendingPayments = billingData.result.data
+            .filter((inv: any) => inv.status === "PENDING")
+            .reduce((sum: number, inv: any) => sum + (inv.totalAmount || 0), 0);
+          setTotalPendingAmount(pendingPayments);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <>

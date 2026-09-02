@@ -61,7 +61,8 @@ export default function App() {
       const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
       try {
-        const response = await fetch('http://localhost:3000/trpc/auth.login', {
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
+        const response = await fetch(`${API_URL}/auth.login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),

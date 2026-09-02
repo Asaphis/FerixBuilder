@@ -160,7 +160,7 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
 
     const fetchData = async () => {
       try {
-        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/trpc";
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
 
         // Fetch user
         const userRes = await fetch(`${API_URL}/auth.me`, {

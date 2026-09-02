@@ -14,7 +14,7 @@ export default function DashboardPage() {
       if (!token) return;
 
       try {
-        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/trpc";
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5006/api/trpc";
 
         // Fetch projects count
         const projectsRes = await fetch(`${API_URL}/projects.getAll`, {

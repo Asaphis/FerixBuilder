@@ -150,13 +150,62 @@ export default function WorkspacePage({ page, initialTab }: { page: WorkspacePag
   const [heroActionVersion, setHeroActionVersion] = useState(0);
   const [workflowLoading, setWorkflowLoading] = useState<string | null>(null);
   const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
 
   // Fetch real user data
   useEffect(() => {
     const token = getAuthToken();
-    if (token) {
-      getCurrentUser(token).then(setUser).catch(() => setUser(null));
-    }
+    if (!token) return;
+
+    const fetchData = async () => {
+      try {
+        const API_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/trpc";
+
+        // Fetch user
+        const userRes = await fetch(`${API_URL}/auth.me`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input: { token } }),
+        });
+        const userData = await userRes.json();
+        if (userData.result?.data) {
+          setUser(userData.result.data);
+        }
+
+        // Fetch projects
+        const projectsRes = await fetch(`${API_URL}/projects.getMyProjects`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ input: {} }),
+        });
+        const projectsData = await projectsRes.json();
+        if (projectsData.result?.data) {
+          setProjects(projectsData.result.data);
+        }
+
+        // Fetch requests
+        const requestsRes = await fetch(`${API_URL}/projectRequests.getMyRequests`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ input: {} }),
+        });
+        const requestsData = await requestsRes.json();
+        if (requestsData.result?.data) {
+          setRequests(requestsData.result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const accountName = user?.name || "FerixBuilder customer";

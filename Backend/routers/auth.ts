@@ -7,6 +7,7 @@ import {
   refreshAccessToken,
   getUserFromToken,
   isAdmin as checkIsAdmin,
+  verifyEmail,
 } from "../_core/auth";
 
 export const authRouter = router({
@@ -30,7 +31,7 @@ export const authRouter = router({
             name: result.user.name,
             role: result.user.role,
           },
-          tokens: result.tokens,
+          emailSent: result.emailSent,
         };
       } catch (error) {
         throw new TRPCError({
@@ -124,7 +125,7 @@ export const authRouter = router({
     )
     .query(({ input }) => {
       const isAdmin = checkIsAdmin(input.token);
-      
+
       if (!isAdmin) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -136,5 +137,26 @@ export const authRouter = router({
         success: true,
         isAdmin: true,
       };
+    }),
+
+  verifyEmail: publicProcedure
+    .input(
+      z.object({
+        token: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const result = await verifyEmail(input.token);
+        return {
+          success: true,
+          alreadyVerified: result.alreadyVerified,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: error instanceof Error ? error.message : "Verification failed",
+        });
+      }
     }),
 });

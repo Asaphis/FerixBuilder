@@ -54,6 +54,37 @@ export default function App() {
   };
 
   if (!isAuthenticated) {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+      const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+
+      try {
+        const response = await fetch('http://localhost:3000/trpc/auth.login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          alert(data.error.message || 'Login failed');
+          return;
+        }
+
+        if (data.result?.data?.success) {
+          localStorage.setItem('adminToken', data.result.data.tokens.accessToken);
+          setIsAuthenticated(true);
+        } else {
+          alert('Login failed');
+        }
+      } catch (error) {
+        alert('Login failed. Please check if backend is running.');
+      }
+    };
+
     return (
       <div className="login-wrapper">
         <div className="login-card">
@@ -65,14 +96,14 @@ export default function App() {
           </div>
           <h1>Welcome Back</h1>
           <p>Please enter your credentials to access the operations hub.</p>
-          <form onSubmit={(e) => { e.preventDefault(); setIsAuthenticated(true); }} className="login-form">
+          <form onSubmit={handleLogin} className="login-form">
             <div className="form-group">
               <label>Email Address</label>
-              <input type="email" placeholder="admin@ferixbuilder.com" required defaultValue="admin@ferixbuilder.com" />
+              <input name="email" type="email" placeholder="admin@ferixbuilder.com" required />
             </div>
             <div className="form-group">
               <label>Password</label>
-              <input type="password" placeholder="••••••••" required defaultValue="password" />
+              <input name="password" type="password" placeholder="••••••••" required />
             </div>
             <button type="submit" className="login-btn">Log In to Dashboard</button>
           </form>

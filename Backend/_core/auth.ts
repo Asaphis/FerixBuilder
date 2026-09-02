@@ -1,10 +1,14 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "./prisma";
+import { Resend } from "resend";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRES_IN = "7d";
 const SALT_ROUNDS = 12;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export interface AuthTokens {
   accessToken: string;
@@ -57,6 +61,69 @@ export function verifyToken(token: string): TokenPayload | null {
 }
 
 /**
+ * Send verification email with link
+ */
+export async function sendVerificationEmail(email: string, userId: string) {
+  if (!resend) {
+    console.warn("Resend not configured - skipping email verification");
+    return false;
+  }
+
+  const verificationToken = generateAccessToken({ userId, email, role: "CUSTOMER" });
+  const verificationLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/verify?token=${verificationToken}`;
+
+  try {
+    await resend.emails.send({
+      from: "FerixBuilder <noreply@ferixbuilder.com>",
+      to: email,
+      subject: "Verify your email address",
+      html: `
+        <h1>Welcome to FerixBuilder</h1>
+        <p>Please click the link below to verify your email address:</p>
+        <a href="${verificationLink}" style="display: inline-block; padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Verify Email</a>
+        <p>Or copy and paste this link into your browser:</p>
+        <p>${verificationLink}</p>
+        <p>This link will expire in 7 days.</p>
+      `,
+    });
+    return true;
+  } catch (error) {
+    console.error("Failed to send verification email:", error);
+    return false;
+  }
+}
+
+/**
+ * Verify email with token
+ */
+export async function verifyEmail(token: string) {
+  const payload = verifyToken(token);
+
+  if (!payload) {
+    throw new Error("Invalid or expired verification link");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.emailVerified) {
+    return { success: true, alreadyVerified: true };
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { emailVerified: true },
+  });
+
+  return { success: true, alreadyVerified: false };
+}
+
+/**
  * Register a new user
  */
 export async function registerUser(data: {
@@ -85,20 +152,10 @@ export async function registerUser(data: {
     },
   });
 
-  const tokens: AuthTokens = {
-    accessToken: generateAccessToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    }),
-    refreshToken: generateRefreshToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    }),
-  };
+  // Send verification email
+  const emailSent = await sendVerificationEmail(user.email, user.id);
 
-  return { user, tokens };
+  return { user, emailSent };
 }
 
 /**
@@ -117,6 +174,11 @@ export async function loginUser(email: string, password: string) {
 
   if (!isValid) {
     throw new Error("Invalid credentials");
+  }
+
+  // Check if email is verified
+  if (!user.emailVerified) {
+    throw new Error("Please verify your email before logging in");
   }
 
   // Update last signed in

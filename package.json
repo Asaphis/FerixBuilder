@@ -10,11 +10,14 @@
     "build:admin": "cd Web/admin && npm run build",
     "build:all": "npm run build && npm run build:frontend && npm run build:admin",
     "start": "NODE_ENV=production node dist/index.js",
+    "start:frontend": "cd Web/frontend && npm run start",
+    "start:admin": "cd Web/admin && npm run start",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@cloudinary/url-gen": "^1.22.0",

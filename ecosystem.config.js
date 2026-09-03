@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   apps: [
     {
       name: 'ferixbuilder-backend',
@@ -20,9 +20,7 @@ export default {
       args: 'run start',
       cwd: '/home/ubuntu/FerixBuilder/Web/frontend',
       env: {
-        NODE_ENV: 'production',
-        VITE_PORT: 5173,
-        VITE_API_URL: 'http://localhost:5006/api'
+        NODE_ENV: 'production'
       },
       instances: 1,
       exec_mode: 'fork',
@@ -36,9 +34,7 @@ export default {
       args: 'run start',
       cwd: '/home/ubuntu/FerixBuilder/Web/admin',
       env: {
-        NODE_ENV: 'production',
-        VITE_PORT: 5174,
-        VITE_API_URL: 'http://localhost:5006/api'
+        NODE_ENV: 'production'
       },
       instances: 1,
       exec_mode: 'fork',
